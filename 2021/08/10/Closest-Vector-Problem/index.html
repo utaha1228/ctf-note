@@ -19,7 +19,7 @@
 
 <!--Open Graph Title-->
 
-    <meta property="og:title" content="Utaha&#39;s CTF Note"/>
+    <meta property="og:title" content="Closest Vector Problem"/>
 
 
 <!--Open Graph Description-->
@@ -32,7 +32,7 @@
 
 <!--Type page-->
 
-    <meta property="og:type" content="website"/>
+    <meta property="og:type" content="article"/>
 
 
 <!--Page Cover-->
@@ -51,7 +51,7 @@
 
 <!-- Title -->
 
-<title>Utaha&#39;s CTF Note</title>
+<title>Closest Vector Problem | Utaha&#39;s CTF Note</title>
 
 <!-- Bootstrap Core CSS -->
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
@@ -167,134 +167,168 @@
 
     <!-- Main Content -->
     <!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
 <header class="intro-header" style="background-image: url('/ctf-note/img/home-bg.jpg')">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 offset-md-2 col-md-10 offset-md-1">
-                <div class="site-heading text-center text-white">
-                    <h1>Utaha's CTF Note</h1>
-                    <!-- <hr class="small"> -->
-                    <!-- <span class="subheading d-block"></span> -->
+            <div class="col-lg-12 col-md-12 text-center">
+                <div class="post-heading text-white">
+                    <h1>Closest Vector Problem</h1>
+                    
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container page-index">
-    <div class="row">
-        <div class="col-lg-8 offset-md-2 col-md-10 offset-md-1">
-            
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Main Content -->
+            <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
                 
-            
-                
-            
-                
-            
-                
-            
-                
-            
-        </div>
-        <div class="col-lg-8 offset-md-2 col-md-10 offset-md-1 post-all">    
-            
-                
-                    <div class="post-preview post-preview-index">
-    <a href="/ctf-note/2021/08/10/Closest-Vector-Problem/">
-        <h2 class="post-title">
-            Closest Vector Problem
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
+                    <span class="meta d-inline-block">
+    
+    
+    <!-- Date -->
+    
+        <span class="post-meta-split">&nbsp;|&nbsp;</span>
+        <i class="far fa-calendar-check fa-fw"></i>
         2021-08-10
-    </p>
-</div>
-<hr>
-                
-            
-                
-                    <div class="post-preview post-preview-index">
-    <a href="/ctf-note/2021/08/01/Elliptic-Curve-Form/">
-        <h2 class="post-title">
-            Elliptic Curve Form
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-08-01
-    </p>
-</div>
-<hr>
-                
-            
-                
-                    <div class="post-preview post-preview-index">
-    <a href="/ctf-note/2021/07/28/Imaginary-CTF-2021/">
-        <h2 class="post-title">
-            Imaginary CTF 2021
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-28
-    </p>
-</div>
-<hr>
-                
-            
-                
-                    <div class="post-preview post-preview-index">
-    <a href="/ctf-note/2021/07/24/IJCTF-2021/">
-        <h2 class="post-title">
-            IJCTF 2021
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-24
-    </p>
-</div>
-<hr>
-                
-            
-                
-                    <div class="post-preview post-preview-index">
-    <a href="/ctf-note/2021/07/20/Smart-s-Attack/">
-        <h2 class="post-title">
-            Smart's Attack
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-20
-    </p>
-</div>
-<hr>
-                
-            
-        </div>
-        <div class="col-lg-8 offset-md-2 col-md-10 offset-md-1 post-all">    
-            <ul class="pagination d-block text-center">
     
+    <!-- word count and read count -->
     
-</ul>
+
+    
+
+    
+        <span class="post-meta-split">&nbsp;|&nbsp;</span>
+        <i class="far fa-eye fa-fw"></i>
+        <span id="busuanzi_value_page_pv"></span>
+    
+</span>  
+                
+                <h2 id="introduction">Introduction</h2>
+<p>Closest Vector Problem (CVP) 是 Shortest Vector Problem (SVP) 的一種變化，本來 SVP 是問離原點最近的格點在哪裡，CVP 則是問距離某個給定點最近的格點在哪裡。注意到 SVP 並不是 CVP 的特例，因為如果你問離原點最近的格點在哪裡，答案一定是原點。</p>
+<p>為了統一符號，格點的基底是 <span class="math inline">\(n\)</span> 個 <span class="math inline">\(n\)</span> 維向量 <span class="math inline">\(b_1, b_2, \cdots, b_n\)</span>，然後我們想要找格點 <span class="math inline">\(A = \sum a_ib_i\)</span> 使得它離 <span class="math inline">\(Y(y_1, y_2, \cdots, y_n)\)</span> 越近越好。解決這個問題毫不意外得靠強大的 LLL 演算法，以下介紹兩種簡單的方式。</p>
+<h2 id="embedded-method">Embedded Method</h2>
+<p>首先我們要先估計最短的向量大概有多長，令這個長度為 <span class="math inline">\(M\)</span>，那我們考慮</p>
+<p><span class="math display">\[\begin{pmatrix}
+ &amp; &amp; b_1 &amp; &amp; &amp; 0\\
+ &amp; &amp; b_2 &amp; &amp; &amp; 0\\
+ &amp; &amp; \vdots &amp; &amp; &amp;\\
+ &amp; &amp; b_n &amp; &amp; &amp; 0\\
+y_1 &amp; y_2 &amp; \cdots &amp; y_{n-1} &amp; y_n &amp; M\\
+\end{pmatrix}\]</span></p>
+<p>其中一個好的格點會是 <span class="math inline">\(\begin{pmatrix}(Y-A) &amp; M\end{pmatrix}\)</span>，長度大約是 <span class="math inline">\(\sqrt{2}M\)</span>。可以注意到如果 <span class="math inline">\(M\)</span> 越大，那演算法越有可能不選最後一列，也就是說演算法直接變成計算 <span class="math inline">\(\{b_i\}\)</span> 的 SVP，反過來 <span class="math inline">\(M\)</span> 越小，演算法可能把最後一列乘上稍微大一點的係數，而這個係數只要不是 <span class="math inline">\(\pm 1\)</span> 就不是我們要的答案。所以這個演算法比較適合用在 <span class="math inline">\(\{b_i\}\)</span> 的 SVP 答案比 <span class="math inline">\(M\)</span> 還要大的狀況。</p>
+<h2 id="babai-rounding-technique">Babai Rounding Technique</h2>
+<p>這個作法想法十分簡單，我們直接考慮以下方程式的解</p>
+<p><span class="math inline">\(\begin{pmatrix} x_1 &amp; x_2 &amp; \cdots &amp; x_n \end{pmatrix} \begin{pmatrix} &amp;&amp; b_1 &amp;&amp; \\ &amp;&amp; b_2 &amp;&amp; \\ &amp;&amp; \vdots &amp;&amp; \\ &amp;&amp; b_n &amp;&amp; \end{pmatrix}= \begin{pmatrix} y_1 &amp; y_2 &amp; \cdots &amp; y_n \end{pmatrix}\)</span></p>
+<p>換句話說 <span class="math inline">\(Y = \sum x_ib_i\)</span>。那我們直接選擇 <span class="math inline">\(a_i = \lfloor x_i\rceil\)</span>，也就是四捨五入 <span class="math inline">\(x_i\)</span>。這個做法不一定能找到很好的解，但是如果我們不使用 <span class="math inline">\(\{b_i\}\)</span>，而是使用 LLL-reduced 的基底 <span class="math inline">\(\{b_i^{*}\}\)</span> 的話，就可以確保找到的解和最佳解只差 exponential constant factor。</p>
+<h2 id="hidden-number-problem">Hidden Number Problem</h2>
+<p>最後舉一個 CTF 中會用到 CVP 的例子 Hidden Number Problem (HNP)。給定 <span class="math inline">\(\{x_i\}\)</span>, <span class="math inline">\(\{y_i\}\)</span>, <span class="math inline">\(p\)</span>，我們想要找 <span class="math inline">\(\alpha\)</span> 使得對於所有 <span class="math inline">\(i\)</span>， <span class="math inline">\(\alpha x_i\)</span> 模 <span class="math inline">\(p\)</span> 底下很接近 <span class="math inline">\(y_i\)</span>，也就是說有個上界 <span class="math inline">\(B\)</span> 滿足</p>
+<p><span class="math display">\[\forall i,\,|(\alpha x_i - y_i)\,\%\,p| &lt; B\]</span></p>
+<p>我們會發現這個問題可以被轉換成 CVP：考慮以下格點</p>
+<p><span class="math display">\[\begin{pmatrix}
+p &amp; &amp; &amp;\\
+&amp; p &amp; &amp;\\
+&amp; &amp; \ddots&amp;\\
+&amp; &amp; &amp; p\\
+x_1 &amp; x_2 &amp; \cdots &amp; x_n &amp; \frac{B}{p}
+\end{pmatrix}\]</span></p>
+<p>最後一列乘上 <span class="math inline">\(\alpha\)</span>，然後其他列消去 <span class="math inline">\(p\)</span> 的倍數會形成一個很接近 <span class="math inline">\(\{y_i\}\)</span> 的向量。如果用 embedded method 做的話，通常取 <span class="math inline">\(M = B\)</span>。雖然把 <span class="math inline">\(x_i\)</span> 列乘上 <span class="math inline">\(p\)</span>，<span class="math inline">\(y_i\)</span> 列乘上 <span class="math inline">\(0\)</span>會得到一個很小的向量 <span class="math inline">\(\begin{pmatrix} 0 &amp; 0 &amp; \cdots &amp; B &amp; 0 \end{pmatrix}\)</span>，但這個向量和我們要的向量幾乎垂直，所以答案很有可能藏在第二小的向量裡面。</p>
+
+            </div>
+
+            <!-- Post information -->
+            
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 post-tags">
+        
+            <i class="fas fa-tag" style="vertical-align: middle;font-size: .8rem;"></i>
+            tags:&nbsp;
+            
+            
+        
+            <a href="/ctf-note/tags/tutorial/">#tutorial</a>
+        
+    </div>
+
+            
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+        <ul class="pagination d-block text-center">
+            
+            
+                <li class="next page-item d-inline"><a href="/ctf-note/2021/08/01/Elliptic-Curve-Form/" class="page-link float-right">Older Posts  &rarr;</a></li>
+            
+        </ul>
+    </div>
+
+
+            
+                <!-- Comments -->
+                
+
+                
+
+            
+
         </div>
     </div>
-</div>
+</article> 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+    <style>
+        #toc-content .toc-link::before {
+            background-color: transparent;
+            max-height: 25px;
+        }
+
+        #toc-content .toc-link.is-active-link::before {
+            background-color: #404040;
+        }
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    <div class="ui-toc dropup scrollspy-body pull-right" style="right: 3%;">
+        <button type="button" class="toc-btn btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+            <i class="fas fa-list"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right p-2"  aria-labelledby="tocLabel">
+            <div class="toc-widget">
+                <div id="toc-content" class="text-truncate">
+                </div>
+            </div>
+            <div class="toc-menu pt-3 pl-4">
+                <a class="expand-toggle d-block py-1" href="#"><span class="expand-text">Expand all</span><span class="close-text" style="display: none;">Collapse all</span></a>
+                <a class="back-to-top d-block py-1" href="#">Back to top</a>
+                <a class="go-to-bottom d-block py-1" href="#">Go to bottom</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '#toc-content',
+            // Where to grab the headings to build the table of contents.
+            contentSelector: 'article',
+            // Which headings to grab inside of the contentSelector element.
+            headingSelector: 'h1, h2, h3',
+            // For headings inside relative or absolute positioned containers within content.
+            hasInnerContainers: true,
+        });
+    </script>
+
+
+    <script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        MathJax.Hub.Config({
+            tex2jax:{inlineMath:[['$', '$']]}
+        })
+    </script>
+
+    
 
 
     <!-- Footer -->
