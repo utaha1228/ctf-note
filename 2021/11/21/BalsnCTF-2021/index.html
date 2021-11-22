@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<!--Description-->
+
+
+
+    <meta name="description" content="MIT &#39;23, Computer Sceince"/>
+
+
+<!--Author-->
+
+    <meta name="author" content="Utaha"/>
+
+
+<!--Open Graph Title-->
+
+    <meta property="og:title" content="BalsnCTF 2021"/>
+
+
+<!--Open Graph Description-->
+
+    <meta property="og:description" content="MIT &#39;23, Computer Sceince"/>
+
+
+<!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Utaha&#39;s CTF Note"/>
+
+<!--Type page-->
+
+    <meta property="og:type" content="article"/>
+
+
+<!--Page Cover-->
+
+
+    <meta property="og:image" content="https://utaha1228.github.io/ctf-note/img/home-bg.jpg"/>
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+
+
+
+
+    <meta name="twitter:image" content="https://utaha1228.github.io/ctf-note/img/home-bg.jpg"/>
+
+
+<!-- Title -->
+
+<title>BalsnCTF 2021 | Utaha&#39;s CTF Note</title>
+
+<!-- Bootstrap Core CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+
+<!-- Custom CSS -->
+
+<link rel="stylesheet" href="/ctf-note/css/main.css">
+
+
+<!-- Custom Fonts -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.0/css/all.min.css" />
+<link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.0/css/all.min.css" />
+<link href="//fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css"/>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<!-- Gallery -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/featherlight@1.4.0/src/featherlight.css" integrity="sha256-30DV/STftlyQ6v8yaOWlabammvCYtRJERLj/m0b3zno=" crossorigin="anonymous">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/lightgallery@1.6.11/dist/css/lightgallery.min.css">
+
+<!-- favicon -->
+
+<link rel="icon" href="/ctf-note/img/favicon.png"/>
+
+
+
+    <!-- Google Analytics -->
+    
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+<!-- Head tag -->
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top bg-transparent position-absolute w-100 p-0" id="nav">
+    <div class="container pl-0 pr-0">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <a class="navbar-brand text-white p-1 pl-3" href="/ctf-note/">Utaha's CTF Note</a>
+        </div>
+        <div>
+            <!--  -->
+            
+                <li class="list-inline-item">
+                    <!-- 
+                     -->
+                    <a class = "navbar-list text-white p-1 pl-3" style = "text-decoration: none;" href="/ctf-note/">
+                        
+                            Home
+                        
+                    </a>
+                </li>
+            
+                <li class="list-inline-item">
+                    <!-- 
+                        <span class="copyright-split">&nbsp;|&nbsp;</span>
+                    
+                     -->
+                    <a class = "navbar-list text-white p-1 pl-3" style = "text-decoration: none;" href="/ctf-note/archives">
+                        
+                            Archives
+                        
+                    </a>
+                </li>
+            
+                <li class="list-inline-item">
+                    <!-- 
+                        <span class="copyright-split">&nbsp;|&nbsp;</span>
+                    
+                     -->
+                    <a class = "navbar-list text-white p-1 pl-3" style = "text-decoration: none;" href="/ctf-note/tags/writeup">
+                        
+                            Tags
+                        
+                    </a>
+                </li>
+            
+                <li class="list-inline-item">
+                    <!-- 
+                        <span class="copyright-split">&nbsp;|&nbsp;</span>
+                    
+                     -->
+                    <a class = "navbar-list text-white p-1 pl-3" style = "text-decoration: none;" href="/ctf-note/about">
+                        
+                            About
+                        
+                    </a>
+                </li>
+            
+        </div>
+        <div class="navbar-nav float-right">
+            <button class="btn btn-link search-btn navbar-item" data-toggle="modal" data-target="#searchModal">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/ctf-note/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 text-center">
+                <div class="post-heading text-white">
+                    <h1>BalsnCTF 2021</h1>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Main Content -->
+            <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+                
+                    <span class="meta d-inline-block">
+    
+    
+    <!-- Date -->
+    
+        <span class="post-meta-split">&nbsp;|&nbsp;</span>
+        <i class="far fa-calendar-check fa-fw"></i>
+        2021-11-21
+    
+    <!-- word count and read count -->
+    
+
+    
+
+    
+        <span class="post-meta-split">&nbsp;|&nbsp;</span>
+        <i class="far fa-eye fa-fw"></i>
+        <span id="busuanzi_value_page_pv"></span>
+    
+</span>  
+                
+                <h2 id="introduction">Introduction</h2>
+<p>Solo BalsnCTF and get destroyed QwQ. I only solve one crypto, which is about predicting output of Mersanne twister. I've only implmented the twister before, so this is quite a new experience for me :D.</p>
+<h2 id="pins">1337 pins</h2>
+<h3 id="challenge">Challenge</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">N = <span class="number">1337</span></span><br><span class="line"></span><br><span class="line">remaining = N</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">31337</span>):</span><br><span class="line">    y = random.getrandbits(<span class="number">32</span>) % <span class="number">10</span></span><br><span class="line">    x = <span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> x == y:</span><br><span class="line">        remaining -= <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        remaining = N</span><br><span class="line">        <span class="built_in">print</span>(y)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> remaining == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/flag.txt&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="built_in">print</span>(f.read())</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<h3 id="solution">Solution</h3>
+<p>By <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41998399/how-exactly-does-random-random-work-in-python">implementation of random</a> and <a target="_blank" rel="noopener" href="https://github.com/python/cpython/blob/530f506ac91338b55cf2be71b1cdf50cb077512f/Modules/_randommodule.c">getrandombits</a>, we can see that it is just a simple mt19937. The initial state is an array of 624 32-bit numbers (which the lowest 31 bits of the first number is not important), and as this PRNG "twist", it does some bitwise operation magic. A cool property is that, if we consider the original 19968 bits as 19968 variables, every bit of the future states can be written as an XOR sum of some of these 19968 variables. As mentioned earlier, the lower 31 bits of the first state is not important, so actually there's only 19937 varaibles (which somehow relates to the name mt19937).</p>
+<p>The challenge provides the last digit of the output, but we only need the last bit (aka the parity). We collect 19937 output, and construct 19937 equations out of the 19937 variables above. Solving these linear equation takes <span class="math inline">\(O(n^3)\)</span> time, but we can do it with bit operation, which makes it faster. With the solution of the equations, we can clone the mt19937 PRNG, and predict the output.</p>
+<p>As a side note, the equation, written as a matrix, seems to be sparse, so skipping unnecessary iteration of the for loop is a huge optimization. I personally don't know why, but adding this optimization solves the euqations in less than 5 seconds.</p>
+<p>The script: <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MT19937</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, seed</span>):</span></span><br><span class="line">		(MT19937.w, MT19937.n, MT19937.m, MT19937.r) = (<span class="number">32</span>, <span class="number">624</span>, <span class="number">397</span>, <span class="number">31</span>)</span><br><span class="line">		MT19937.a = <span class="number">0x9908B0DF</span></span><br><span class="line">		(MT19937.u, MT19937.d) = (<span class="number">11</span>, <span class="number">0xFFFFFFFF</span>)</span><br><span class="line">		(MT19937.s, MT19937.b) = (<span class="number">7</span>, <span class="number">0x9D2C5680</span>)</span><br><span class="line">		(MT19937.t, MT19937.c) = (<span class="number">15</span>, <span class="number">0xEFC60000</span>)</span><br><span class="line">		MT19937.l = <span class="number">18</span></span><br><span class="line">		self.states = [seed]</span><br><span class="line">		MT19937.lowerMask = (<span class="number">1</span> &lt;&lt; MT19937.r) - <span class="number">1</span></span><br><span class="line">		MT19937.mask = (<span class="number">1</span> &lt;&lt; MT19937.w) - <span class="number">1</span></span><br><span class="line">		MT19937.upperMask = MT19937.mask ^ MT19937.lowerMask</span><br><span class="line">		self.index = MT19937.n</span><br><span class="line">		MT19937.f = <span class="number">1812433253</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, self.n):</span><br><span class="line">			self.states.append(self.mask &amp; (i + self.f * (self.states[i-<span class="number">1</span>] ^ (self.states[i-<span class="number">1</span>] &gt;&gt; (self.w - <span class="number">2</span>)))))</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">temper</span>(<span class="params">self,num</span>):</span></span><br><span class="line">		num = num ^ ((num &gt;&gt; MT19937.u) &amp; MT19937.d)</span><br><span class="line">		num = num ^ ((num &lt;&lt; MT19937.s) &amp; MT19937.b)</span><br><span class="line">		num = num ^ ((num &lt;&lt; MT19937.t) &amp; MT19937.c)</span><br><span class="line">		num = num ^ (num &gt;&gt; MT19937.l)</span><br><span class="line">		<span class="keyword">return</span> num</span><br><span class="line">		</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">rand</span>(<span class="params">self</span>):</span></span><br><span class="line">		<span class="keyword">if</span> self.index &gt;= MT19937.n:</span><br><span class="line">			self.twist()</span><br><span class="line">		y = self.states[self.index]</span><br><span class="line">		self.index += <span class="number">1</span></span><br><span class="line">		<span class="keyword">return</span> self.temper(y)</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">twist</span>(<span class="params">self</span>):</span></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(MT19937.n):</span><br><span class="line">			x = (self.states[i] &amp; MT19937.upperMask) ^ (self.states[(i + <span class="number">1</span>) % MT19937.n] &amp; MT19937.lowerMask)</span><br><span class="line">			xA = x &gt;&gt; <span class="number">1</span></span><br><span class="line">			<span class="keyword">if</span> x &amp; <span class="number">1</span>:</span><br><span class="line">				xA = xA ^ self.a</span><br><span class="line"></span><br><span class="line">			self.states[i] = self.states[(i + MT19937.m) % MT19937.n] ^ xA</span><br><span class="line"></span><br><span class="line">		self.index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bitwiseMT19937</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.states = [[<span class="number">1</span> &lt;&lt; (i * <span class="number">32</span> + j) <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(MT19937.n)]</span><br><span class="line">        self.index = MT19937.n</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">temper</span>(<span class="params">self, num</span>):</span></span><br><span class="line">        ret = num[:]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">            <span class="keyword">if</span> (MT19937.d &gt;&gt; i) &amp; <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">if</span> i + MT19937.u &lt; <span class="number">32</span>:</span><br><span class="line">                    ret[i] ^= ret[i + MT19937.u]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">31</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> (MT19937.b &gt;&gt; i) &amp; <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">if</span> i - MT19937.s &gt;= <span class="number">0</span>:</span><br><span class="line">                    ret[i] ^= ret[i - MT19937.s]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">31</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> (MT19937.c &gt;&gt; i) &amp; <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">if</span> i - MT19937.t &gt;= <span class="number">0</span>:</span><br><span class="line">                    ret[i] ^= ret[i - MT19937.t]</span><br><span class="line">                    </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">            <span class="keyword">if</span> i + MT19937.l &lt; <span class="number">32</span>:</span><br><span class="line">                ret[i] ^= ret[i + MT19937.l]</span><br><span class="line">        <span class="comment"># num = num ^ ((num &gt;&gt; MT19937.u) &amp; MT19937.d)</span></span><br><span class="line">        <span class="comment"># num = num ^ ((num &lt;&lt; MT19937.s) &amp; MT19937.b)</span></span><br><span class="line">        <span class="comment"># num = num ^ ((num &lt;&lt; MT19937.t) &amp; MT19937.c)</span></span><br><span class="line">        <span class="comment"># num = num ^ (num &gt;&gt; MT19937.l)</span></span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">rand</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">if</span> self.index &gt;= MT19937.n:</span><br><span class="line">            self.twist()</span><br><span class="line">        y = self.states[self.index]</span><br><span class="line">        self.index += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> self.temper(y)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">twist</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(MT19937.n):</span><br><span class="line">            x = self.states[(i + <span class="number">1</span>) % MT19937.n][:-<span class="number">1</span>] + self.states[i][-<span class="number">1</span>:]</span><br><span class="line">            xA = x[<span class="number">1</span>:] + [<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">                <span class="keyword">if</span> (MT19937.a &gt;&gt; t) &amp; <span class="number">1</span>:</span><br><span class="line">                    xA[t] ^= x[<span class="number">0</span>]</span><br><span class="line">            <span class="comment"># x = (self.states[i] &amp; MT19937.upperMask) ^ (self.states[(i + 1) % MT19937.n] &amp; MT19937.lowerMask)</span></span><br><span class="line">            <span class="comment"># xA = x &gt;&gt; 1</span></span><br><span class="line">            <span class="comment"># if x &amp; 1:</span></span><br><span class="line">            <span class="comment">#     xA = xA ^ self.a</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">                self.states[i][t] = self.states[(i + MT19937.m) % MT19937.n][t] ^ xA[t]</span><br><span class="line">            <span class="comment"># self.states[i] = self.states[(i + MT19937.m) % MT19937.n] ^ xA</span></span><br><span class="line"></span><br><span class="line">        self.index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">count</span>(<span class="params">x</span>):</span></span><br><span class="line">    ret = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20000</span>):</span><br><span class="line">        ret ^= ((x &gt;&gt; i) &amp; <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line">TOTAL_BITS = <span class="number">19968</span></span><br><span class="line"></span><br><span class="line">linear_base = [(-<span class="number">1</span>, -<span class="number">1</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(TOTAL_BITS)]</span><br><span class="line">total = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">bits, output</span>):</span></span><br><span class="line">    <span class="keyword">global</span> total</span><br><span class="line">    <span class="keyword">while</span> bits:</span><br><span class="line">        idx = bits.bit_length() - <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> linear_base[idx] == (-<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">            linear_base[idx] = (bits, output)</span><br><span class="line">            total += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            bits ^= linear_base[idx][<span class="number">0</span>]</span><br><span class="line">            output ^= linear_base[idx][<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">rng = MT19937(<span class="number">9487</span>)</span><br><span class="line">bitRng = bitwiseMT19937()</span><br><span class="line"></span><br><span class="line">r = remote(<span class="string">&#x27;1337pins.balsnctf.com&#x27;</span>, <span class="number">27491</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getNextOutput</span>(<span class="params">debug = <span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        <span class="keyword">return</span> random.getrandbits(<span class="number">32</span>) % <span class="number">10</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        r.sendline(<span class="string">b&#x27;0&#x27;</span>)</span><br><span class="line">        tmp = r.recvline().strip()</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span> <span class="keyword">if</span> tmp == <span class="string">b&#x27;.&#x27;</span> <span class="keyword">else</span> <span class="built_in">int</span>(tmp)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tqdm(<span class="built_in">range</span>(<span class="number">20000</span>)):</span><br><span class="line">    bits = bitRng.rand()[<span class="number">0</span>]</span><br><span class="line">    output = getNextOutput() &amp; <span class="number">1</span></span><br><span class="line">    add(bits, output)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(total)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(TOTAL_BITS):</span><br><span class="line">    <span class="keyword">if</span> linear_base[i] == (-<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">assert</span> (linear_base[i][<span class="number">0</span>] &amp; ((<span class="number">1</span> &lt;&lt; <span class="number">31</span>) - <span class="number">1</span>)) == <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tqdm(<span class="built_in">range</span>(TOTAL_BITS)):</span><br><span class="line">    <span class="keyword">if</span> linear_base[i] == (-<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">        linear_base[i] = (<span class="number">1</span> &lt;&lt; i, <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">    mask = linear_base[i][<span class="number">0</span>] ^ (<span class="number">1</span> &lt;&lt; i)</span><br><span class="line">    <span class="keyword">while</span> mask:</span><br><span class="line">        idx = mask.bit_length() - <span class="number">1</span></span><br><span class="line">        linear_base[i] = (linear_base[i][<span class="number">0</span>] ^ linear_base[idx][<span class="number">0</span>], linear_base[i][<span class="number">1</span>] ^ linear_base[idx][<span class="number">1</span>])</span><br><span class="line">        mask ^= (<span class="number">1</span> &lt;&lt; idx)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(TOTAL_BITS):</span><br><span class="line">    <span class="keyword">assert</span> linear_base[i][<span class="number">0</span>] == (<span class="number">1</span> &lt;&lt; i)</span><br><span class="line"></span><br><span class="line">stateLong = <span class="built_in">sum</span>((<span class="number">1</span> &lt;&lt; i) * linear_base[i][<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(TOTAL_BITS))</span><br><span class="line">states = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(MT19937.n):</span><br><span class="line">    states.append(stateLong &amp; ((<span class="number">1</span> &lt;&lt; <span class="number">32</span>) - <span class="number">1</span>))</span><br><span class="line">    stateLong &gt;&gt;= <span class="number">32</span></span><br><span class="line"></span><br><span class="line">rng.states = states[:]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20000</span>):</span><br><span class="line">    rng.rand()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1337</span>):</span><br><span class="line">    myGuess = rng.rand() % <span class="number">10</span></span><br><span class="line">    r.sendline(<span class="built_in">str</span>(myGuess))</span><br><span class="line">    r.recvline()</span><br><span class="line">     </span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure></p>
+
+            </div>
+
+            <!-- Post information -->
+            
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 post-tags">
+        
+            <i class="fas fa-tag" style="vertical-align: middle;font-size: .8rem;"></i>
+            tags:&nbsp;
+            
+            
+        
+            <a href="/ctf-note/tags/writeup/">#writeup</a>
+        
+    </div>
+
+            
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+        <ul class="pagination d-block text-center">
+            
+            
+                <li class="next page-item d-inline"><a href="/ctf-note/2021/11/14/CSAW-final-2021/" class="page-link float-right">Older Posts  &rarr;</a></li>
+            
+        </ul>
+    </div>
+
+
+            
+                <!-- Comments -->
+                
+
+                
+
+            
+
+        </div>
+    </div>
+</article> 
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+    <style>
+        #toc-content .toc-link::before {
+            background-color: transparent;
+            max-height: 25px;
+        }
+
+        #toc-content .toc-link.is-active-link::before {
+            background-color: #404040;
+        }
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    <div class="ui-toc dropup scrollspy-body pull-right" style="right: 3%;">
+        <button type="button" class="toc-btn btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+            <i class="fas fa-list"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right p-2"  aria-labelledby="tocLabel">
+            <div class="toc-widget">
+                <div id="toc-content" class="text-truncate">
+                </div>
+            </div>
+            <div class="toc-menu pt-3 pl-4">
+                <a class="expand-toggle d-block py-1" href="#"><span class="expand-text">Expand all</span><span class="close-text" style="display: none;">Collapse all</span></a>
+                <a class="back-to-top d-block py-1" href="#">Back to top</a>
+                <a class="go-to-bottom d-block py-1" href="#">Go to bottom</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '#toc-content',
+            // Where to grab the headings to build the table of contents.
+            contentSelector: 'article',
+            // Which headings to grab inside of the contentSelector element.
+            headingSelector: 'h1, h2, h3',
+            // For headings inside relative or absolute positioned containers within content.
+            hasInnerContainers: true,
+        });
+    </script>
+
+
+    <script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        MathJax.Hub.Config({
+            tex2jax:{inlineMath:[['$', '$']]}
+        })
+    </script>
+
+    
+
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 text-center">
+                <ul class="list-inline">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright footer-author">
+                    &copy; 2021-2021 
+                    <a rel="external" class="copyright-link" href="" target="_blank">Utaha</a><br/>
+                    Powered by <a rel="external" class="copyright-link" href="https://hexo.io/" target="_blank">Hexo</a>  
+                    <span class="copyright-split">&nbsp;|&nbsp;&nbsp;</span>
+                    Theme <a rel="external" class="copyright-link" href="https://github.com/luswdev/hexo-theme-clean.git" target="_blank">Clean</a>
+                    
+                    
+                        <span id="busuanzi_container_site_uv">
+                            <span class="copyright-split">&nbsp;|&nbsp;</span>
+                            <i class="fas fa-user-friends"></i>&nbsp;&nbsp;<span id="busuanzi_value_site_uv"></span>&nbsp;
+                        </span>
+                    
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    <!-- jQuery -->
+<script src="//cdn.jsdelivr.net/npm/jquery@2.1.4/dist/jquery.min.js"></script>
+
+<!-- For drop down -->
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+<!-- Gallery -->
+<script src="//cdn.jsdelivr.net/npm/lightgallery@1.6.11/dist/js/lightgallery-all.min.js"></script>
+<!-- Busuanzi -->
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Search script -->
+
+<script src="/ctf-note/js/search.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        searchFunc( '/ctf-note/search.xml' , 'searchInput', 'searchResult');
+    });
+</script>
+
+
+
+<script src="/ctf-note/js/main.js"></script>
+
+
+
+    <!-- Search Modal -->
+    <!-- Modal -->
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content overflow-auto">
+            <div class="modal-header">
+                <input type="text" class="form-control" placeholder="Searching Keywords..." id="searchInput">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="searchResult">
+                    <div class="search-empty text-center text-muted p-5">
+                        <i class="far fa-meh"></i>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
