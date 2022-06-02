@@ -19,7 +19,7 @@
 
 <!--Open Graph Title-->
 
-    <meta property="og:title" content="Utaha&#39;s CTF Note"/>
+    <meta property="og:title" content="Elliptic Curve Basics"/>
 
 
 <!--Open Graph Description-->
@@ -32,7 +32,7 @@
 
 <!--Type page-->
 
-    <meta property="og:type" content="website"/>
+    <meta property="og:type" content="article"/>
 
 
 <!--Page Cover-->
@@ -51,7 +51,7 @@
 
 <!-- Title -->
 
-<title>tutorial | Utaha&#39;s CTF Note</title>
+<title>Elliptic Curve Basics | Utaha&#39;s CTF Note</title>
 
 <!-- Bootstrap Core CSS -->
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
@@ -166,106 +166,165 @@
 </nav>
 
     <!-- Main Content -->
-    <header class="intro-header" style="background-image: url('/ctf-note/img/home-bg.jpg')">
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/ctf-note/img/home-bg.jpg')">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-                <div class="site-heading text-center text-white">
-                    <h1>Tag: tutorial:</h1>
+            <div class="col-lg-12 col-md-12 text-center">
+                <div class="post-heading text-white">
+                    <h1>Elliptic Curve Basics</h1>
+                    
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container page-tags">
-    <div class="row">
-        <div class="col-lg-10 offset-lg-1 text-center">
-            
-                
-    <a href="/ctf-note/tags/writeup/" class="btn btn-light m-2">
-        writeup
-    </a>
-
-
-            
-                
-    <a href="/ctf-note/tags/tutorial/" class="btn btn-info m-2">
-        tutorial
-        <span class="badge badge-light">4</span>
-    </a>
-
-
-            
-        </div>
-        
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Main Content -->
             <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-                <hr class="tag-preview-hr">
                 
-                    <div class="post-preview post-preview-archive-tag">
-    <a href="/ctf-note/2021/12/21/Elliptic-Curve-Basics/">
-        <h1 class="post-title">
-            Elliptic Curve Basics
-        </h1>
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
+                    <span class="meta d-inline-block">
+    
+    
+    <!-- Date -->
+    
+        <span class="post-meta-split">&nbsp;|&nbsp;</span>
+        <i class="far fa-calendar-check fa-fw"></i>
         2021-12-21
-    </p>
-</div>
-                
-                    <div class="post-preview post-preview-archive-tag">
-    <a href="/ctf-note/2021/08/10/Closest-Vector-Problem/">
-        <h1 class="post-title">
-            Closest Vector Problem
-        </h1>
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-08-10
-    </p>
-</div>
-                
-                    <div class="post-preview post-preview-archive-tag">
-    <a href="/ctf-note/2021/08/01/Elliptic-Curve-Form/">
-        <h1 class="post-title">
-            Elliptic Curve Form
-        </h1>
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-08-01
-    </p>
-</div>
-                
-                    <div class="post-preview post-preview-archive-tag">
-    <a href="/ctf-note/2021/07/20/Smart-s-Attack/">
-        <h1 class="post-title">
-            Smart's Attack
-        </h1>
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-20
-    </p>
-</div>
-                
-                <div class="archive-before-pagination"></div>
-                <ul class="pagination d-block text-center">
     
+    <!-- word count and read count -->
     
-</ul>
+
+    
+
+    
+        <span class="post-meta-split">&nbsp;|&nbsp;</span>
+        <i class="far fa-eye fa-fw"></i>
+        <span id="busuanzi_value_page_pv"></span>
+    
+</span>  
+                
+                <p>A random note for some basic things about elliptic curve.</p>
+<h2 id="intro">Intro</h2>
+<p>橢圓曲線</p>
+<p><span class="math display">\[y^2 + a_1 xy + a_3 y = x^3 + a_2x^2 + a_4x + a_6\]</span></p>
+<p>的二維曲線，這裡我們只考慮 <span class="math inline">\(\mathbb{Z}_p\)</span> 下的橢圓曲線，也就是</p>
+<p><span class="math display">\[y^2 + a_1 xy + a_3 y = x^3 + a_2x^2 + a_4x + a_6 \pmod{p}\]</span></p>
+<p>其中 <span class="math inline">\(p\)</span> 為一質數，在大部分的情況下 (<span class="math inline">\(p \ne 2, 3\)</span>)，橢圓曲線都可以化簡成以下形式：</p>
+<p><span class="math display">\[y^2 = x^3 + Ax + B \pmod{p}\]</span></p>
+<p>以下我們都使用簡化後的形式。</p>
+<h2 id="曲線形狀">曲線形狀</h2>
+<p>橢圓曲線有兩個重要的參數：判別式和 <span class="math inline">\(j\)</span>-invariant。前者決定橢圓曲線的形狀，後者決定兩條曲線是否等價。</p>
+<p><span class="math display">\[\Delta = -16(4A^3+27B^2)\]</span> <span class="math display">\[j = \frac{6912A^3}{4A^3 + 27B^2}\]</span></p>
+<p>如果判別式是正的，橢圓曲線會是一個圈圈加一條曲線，負的則會是一條曲線，為零的時候會形成singular curve</p>
+<h2 id="singular-curve">Singular Curve</h2>
+<p>Singular Curve 的形式為 <span class="math inline">\(y^2 = x^3 - Ax^2\)</span> (注意到這裡我們保留 <span class="math inline">\(x^2\)</span> 項)，曲線有參數式 <span class="math inline">\((t^2 + A, t(t^2 + A))\)</span>。若曲線上的 <span class="math inline">\(P, Q, R\)</span> 都在一條直線 <span class="math inline">\(y = ax + b\)</span> 上，則這三點的參數 <span class="math inline">\(t_P, t_Q, t_R\)</span> 滿足方程式</p>
+<p><span class="math display">\[t(t^2 + A) = a(t^2 + A) + b\]</span> <span class="math display">\[t^3 - at^2 + At - (aA + b) = 0\]</span></p>
+<p>由根與係數的關係，我們有</p>
+<p><span class="math display">\[t_Pt_Q + t_Pt_R + t_Qt_R = A\]</span></p>
+<p>然後改寫成</p>
+<p><span class="math display">\[\prod_{cyc} \frac{t_P + \sqrt{A}}{t_P - \sqrt{A}} = 1\]</span></p>
+<p>由於 <span class="math inline">\(t = \frac{y}{x}\)</span>，考慮映射：</p>
+<p><span class="math display">\[(x, y) \mapsto \frac{y-\sqrt{A}x}{y + \sqrt{A}x}\]</span></p>
+<p>我們可以把三點共線轉化成三個數字相乘是 <span class="math inline">\(1\)</span>，也就相當於把橢圓曲線上的 DLP 轉化成一般的 DLP。值得一提的是當 <span class="math inline">\(A\)</span> 是二次剩餘時是 <span class="math inline">\(\mathbb{Z}_{q}\)</span> 的DLP，否則是某種高斯整數的 DLP，order 是 <span class="math inline">\(p + 1\)</span>。</p>
+
             </div>
+
+            <!-- Post information -->
+            
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 post-tags">
+        
+            <i class="fas fa-tag" style="vertical-align: middle;font-size: .8rem;"></i>
+            tags:&nbsp;
+            
+            
+        
+            <a href="/ctf-note/tags/tutorial/">#tutorial</a>
         
     </div>
-</div>
+
+            
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+        <ul class="pagination d-block text-center">
+            
+                <li class="previous page-item d-inline"><a href="/ctf-note/2022/06/01/Some-ideas-to-solve-congruence-equations/" class="page-link float-left">&larr;  Newer Posts</a></li>
+            
+            
+                <li class="next page-item d-inline"><a href="/ctf-note/2021/11/28/DragonCTF-2021/" class="page-link float-right">Older Posts  &rarr;</a></li>
+            
+        </ul>
+    </div>
 
 
+            
+                <!-- Comments -->
+                
+
+                
+
+            
+
+        </div>
+    </div>
+</article> 
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+    <style>
+        #toc-content .toc-link::before {
+            background-color: transparent;
+            max-height: 25px;
+        }
+
+        #toc-content .toc-link.is-active-link::before {
+            background-color: #404040;
+        }
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    <div class="ui-toc dropup scrollspy-body pull-right" style="right: 3%;">
+        <button type="button" class="toc-btn btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+            <i class="fas fa-list"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right p-2"  aria-labelledby="tocLabel">
+            <div class="toc-widget">
+                <div id="toc-content" class="text-truncate">
+                </div>
+            </div>
+            <div class="toc-menu pt-3 pl-4">
+                <a class="expand-toggle d-block py-1" href="#"><span class="expand-text">Expand all</span><span class="close-text" style="display: none;">Collapse all</span></a>
+                <a class="back-to-top d-block py-1" href="#">Back to top</a>
+                <a class="go-to-bottom d-block py-1" href="#">Go to bottom</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '#toc-content',
+            // Where to grab the headings to build the table of contents.
+            contentSelector: 'article',
+            // Which headings to grab inside of the contentSelector element.
+            headingSelector: 'h1, h2, h3',
+            // For headings inside relative or absolute positioned containers within content.
+            hasInnerContainers: true,
+        });
+    </script>
+
+
+    <script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        MathJax.Hub.Config({
+            tex2jax:{inlineMath:[['$', '$']]}
+        })
+    </script>
+
+    
 
 
     <!-- Footer -->

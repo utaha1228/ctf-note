@@ -19,7 +19,7 @@
 
 <!--Open Graph Title-->
 
-    <meta property="og:title" content="Closest Vector Problem"/>
+    <meta property="og:title" content="Some ideas to solve congruence equations"/>
 
 
 <!--Open Graph Description-->
@@ -51,7 +51,7 @@
 
 <!-- Title -->
 
-<title>Closest Vector Problem | Utaha&#39;s CTF Note</title>
+<title>Some ideas to solve congruence equations | Utaha&#39;s CTF Note</title>
 
 <!-- Bootstrap Core CSS -->
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
@@ -174,7 +174,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 text-center">
                 <div class="post-heading text-white">
-                    <h1>Closest Vector Problem</h1>
+                    <h1>Some ideas to solve congruence equations</h1>
                     
                 </div>
             </div>
@@ -196,7 +196,7 @@
     
         <span class="post-meta-split">&nbsp;|&nbsp;</span>
         <i class="far fa-calendar-check fa-fw"></i>
-        2021-08-10
+        2022-06-01
     
     <!-- word count and read count -->
     
@@ -210,59 +210,32 @@
     
 </span>  
                 
-                <h2 id="introduction">Introduction</h2>
-<p>Closest Vector Problem (CVP) 是 Shortest Vector Problem (SVP) 的一種變化，本來 SVP 是問離原點最近的格點在哪裡，CVP 則是問距離某個給定點最近的格點在哪裡。注意到 SVP 並不是 CVP 的特例，因為如果你問離原點最近的格點在哪裡，答案一定是原點。</p>
-<p>為了統一符號，格點的基底是 <span class="math inline">\(n\)</span> 個 <span class="math inline">\(n\)</span> 維向量 <span class="math inline">\(b_1, b_2, \cdots, b_n\)</span>，然後我們想要找格點 <span class="math inline">\(A = \sum a_ib_i\)</span> 使得它離 <span class="math inline">\(Y(y_1, y_2, \cdots, y_n)\)</span> 越近越好。解決這個問題毫不意外得靠強大的 LLL 演算法，以下介紹兩種簡單的方式。</p>
-<h2 id="embedded-method">Embedded Method</h2>
-<p>首先我們要先估計最短的向量大概有多長，令這個長度為 <span class="math inline">\(M\)</span>，那我們考慮</p>
-<p><span class="math display">\[\begin{pmatrix}
- &amp; &amp; b_1 &amp; &amp; &amp; 0\\
- &amp; &amp; b_2 &amp; &amp; &amp; 0\\
- &amp; &amp; \vdots &amp; &amp; &amp;\\
- &amp; &amp; b_n &amp; &amp; &amp; 0\\
-y_1 &amp; y_2 &amp; \cdots &amp; y_{n-1} &amp; y_n &amp; M\\
-\end{pmatrix}\]</span></p>
-<p>其中一個好的格點會是 <span class="math inline">\(\begin{pmatrix}(Y-A) &amp; M\end{pmatrix}\)</span>，長度大約是 <span class="math inline">\(\sqrt{2}M\)</span>。可以注意到如果 <span class="math inline">\(M\)</span> 越大，那演算法越有可能不選最後一列，也就是說演算法直接變成計算 <span class="math inline">\(\{b_i\}\)</span> 的 SVP，反過來 <span class="math inline">\(M\)</span> 越小，演算法可能把最後一列乘上稍微大一點的係數，而這個係數只要不是 <span class="math inline">\(\pm 1\)</span> 就不是我們要的答案。所以這個演算法比較適合用在 <span class="math inline">\(\{b_i\}\)</span> 的 SVP 答案比 <span class="math inline">\(M\)</span> 還要大的狀況。</p>
-<h2 id="babai-rounding-technique">Babai Rounding Technique</h2>
-<p>這個作法想法十分簡單，我們直接考慮以下方程式的解</p>
-<p><span class="math inline">\(\begin{pmatrix} x_1 &amp; x_2 &amp; \cdots &amp; x_n \end{pmatrix} \begin{pmatrix} &amp;&amp; b_1 &amp;&amp; \\ &amp;&amp; b_2 &amp;&amp; \\ &amp;&amp; \vdots &amp;&amp; \\ &amp;&amp; b_n &amp;&amp; \end{pmatrix}= \begin{pmatrix} y_1 &amp; y_2 &amp; \cdots &amp; y_n \end{pmatrix}\)</span></p>
-<p>換句話說 <span class="math inline">\(Y = \sum x_ib_i\)</span>。那我們直接選擇 <span class="math inline">\(a_i = \lfloor x_i\rceil\)</span>，也就是四捨五入 <span class="math inline">\(x_i\)</span>。這個做法不一定能找到很好的解，但是如果我們不使用 <span class="math inline">\(\{b_i\}\)</span>，而是使用 LLL-reduced 的基底 <span class="math inline">\(\{b_i^{*}\}\)</span> 的話，就可以確保找到的解和最佳解只差 exponential constant factor。</p>
-<h2 id="hidden-number-problem">Hidden Number Problem</h2>
-<p>最後舉一個 CTF 中會用到 CVP 的例子 Hidden Number Problem (HNP)。給定 <span class="math inline">\(\{x_i\}\)</span>, <span class="math inline">\(\{y_i\}\)</span>, <span class="math inline">\(p\)</span>，我們想要找 <span class="math inline">\(\alpha\)</span> 使得對於所有 <span class="math inline">\(i\)</span>， <span class="math inline">\(\alpha x_i\)</span> 模 <span class="math inline">\(p\)</span> 底下很接近 <span class="math inline">\(y_i\)</span>，也就是說有個上界 <span class="math inline">\(B\)</span> 滿足</p>
-<p><span class="math display">\[\forall i,\,|(\alpha x_i - y_i)\,\%\,p| &lt; B\]</span></p>
-<p>我們會發現這個問題可以被轉換成 CVP：考慮以下格點</p>
-<p><span class="math display">\[\begin{pmatrix}
-p &amp; &amp; &amp;\\
-&amp; p &amp; &amp;\\
-&amp; &amp; \ddots&amp;\\
-&amp; &amp; &amp; p\\
-x_1 &amp; x_2 &amp; \cdots &amp; x_n &amp; \frac{B}{p}
-\end{pmatrix}\]</span></p>
-<p>最後一列乘上 <span class="math inline">\(\alpha\)</span>，然後其他列消去 <span class="math inline">\(p\)</span> 的倍數會形成一個很接近 <span class="math inline">\(\{y_i\}\)</span> 的向量。如果用 embedded method 做的話，通常取 <span class="math inline">\(M = B\)</span>。雖然把 <span class="math inline">\(x_i\)</span> 列乘上 <span class="math inline">\(p\)</span>，<span class="math inline">\(y_i\)</span> 列乘上 <span class="math inline">\(0\)</span>會得到一個很小的向量 <span class="math inline">\(\begin{pmatrix} 0 &amp; 0 &amp; \cdots &amp; B &amp; 0 \end{pmatrix}\)</span>，但這個向量和我們要的向量幾乎垂直，所以答案很有可能藏在第二小的向量裡面。</p>
+                <h2 id="motivation">Motivation</h2>
+<p>Normally, given an equation <span class="math inline">\(f(x) = 0\)</span>, one can find all roots by WolframAlpha or some magical algorithms. However, the congruence version <span class="math inline">\(f(x) \equiv 0 \pmod n\)</span> is a lot harder. In the context of CTF crypto challenges, a common trick is to somehow find another relation <span class="math inline">\(g(x) = 0\)</span> and calculate the gcd of <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> (which has degree 1 most of the time). This can be generalized to multi-variable case: given <span class="math inline">\(n\)</span> variables and <span class="math inline">\(n + 1\)</span> congruence equations with the same modulus, it is possible to solve the equations in time constant to <span class="math inline">\(n\)</span> (assuming each arithmetic operation takes <span class="math inline">\(O(1)\)</span> time).</p>
+<p>In the case of two variables, I found an idea to make things simpler. It might be a well-known trick, and in that case, this article serves as a tutorial :p</p>
+<h2 id="naive-method">Naive method</h2>
+<p>Given <span class="math inline">\(f(x, y) = g(x, y) = h(x, y) = 0\)</span>, we can treat <span class="math inline">\(x\)</span> as a constant and <span class="math inline">\(y\)</span> as the variable. After calculating <span class="math inline">\(\gcd(f, g)\)</span> and <span class="math inline">\(\gcd(g, h)\)</span>, we get two equations of <span class="math inline">\(x\)</span>, which reduces to the one-variable case.</p>
+<p>However, the issue is that the coefficents grow exponentially in the process of gcd calculation. Specifically, consider two equations</p>
+<p><span class="math display">\[A = a_n(x)y^n + a_{n-1}(x)y^{n-1} + \dots + a_1(x)y + a_0(x)\]</span> <span class="math display">\[B = b_n(x)y^n + b_{n-1}(x)y^{n-1} + \dots + b_1(x)y + b_0(x)\]</span></p>
+<p>where all <span class="math inline">\(a_i\)</span> and <span class="math inline">\(b_i\)</span> has bounded degree <span class="math inline">\(d\)</span>. To cancel the <span class="math inline">\(y^n\)</span> term, we calculate <span class="math inline">\(b_n(x)A - a_n(x)B\)</span>, and in the worst case, the coefficeints of the result have degree <span class="math inline">\(2d\)</span>. As there are <span class="math inline">\(n\)</span> iterations, the final result has degree <span class="math inline">\(d2^n\)</span>, which is unacceptable.</p>
+<h2 id="another-approach">Another approach</h2>
+<p>We still want to calculate the gcd, but we need something better than the Euclidean method's exponential-size result.</p>
+<p>Given <span class="math inline">\(f(x, y) = g(x, y) = 0\)</span>, consider the polynomial ring divided by <span class="math inline">\(g(x, y)\)</span>. By division, we set <span class="math inline">\(y\)</span> as the major variables, meaning that if the degree of <span class="math inline">\(g(x, y)\)</span> with respect to <span class="math inline">\(y\)</span> is <span class="math inline">\(d\)</span>, then every <span class="math inline">\(y^d\)</span> (or greater) term must be substituted. The idea is that for <span class="math inline">\(0 \le i &lt; d\)</span>, <span class="math display">\[f(x, y)y^i = f^i_{d-1}(x)y^{d-1} + \dots + f^i_{1}(x)y + f^i_0(x)\]</span> can be seen as a vector of polynomials <span class="math inline">\(v_i = (f^i_0, f^i_1, \dots, f^i_{d-1})\)</span>. These <span class="math inline">\(d\)</span> vectors span a space, and if a vector <span class="math inline">\((t(x), 0, 0, \dots, 0)\)</span> is in the space, then <span class="math inline">\(t(x)\)</span> is the gcd we want. This motivates us to put these <span class="math inline">\(d\)</span> vectors in a <span class="math inline">\(d \times d\)</span> square matrix and perform Guassian elimination, but Guassian elimination has the same issue as Euclidean method – the coefficent growth. Instead, we calculate the determinant of the matrix, which is a multiple of <span class="math inline">\(t(x)\)</span>, by <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bareiss_algorithm">Barieiss algorithm</a> to avoid exponential-size calculation.</p>
+<p>The last detail is the calculation of <span class="math inline">\(f(x, y)y^i\)</span>. Notice that while <span class="math inline">\(f(x, y)\)</span> has bounded degree <span class="math inline">\(d\)</span>, <span class="math inline">\(f(x, y)y\)</span> can have higher degree because when the <span class="math inline">\(y^n\)</span> term exists, we need to perform a division. The good news is that this process has linear degree growth, so <span class="math inline">\(f(x, y)y^i\)</span> has degree at most <span class="math inline">\(id\)</span>, and the determinant will have degree <span class="math inline">\(O(d^2)\)</span>.</p>
+<h2 id="remark">Remark</h2>
+<p>The above method utilizes a lot of polynomial arithmetic operation. I found <a target="_blank" rel="noopener" href="https://docs.sympy.org/latest/modules/polys/internals.html">sympy galois tools</a> useful, but they probably didn't implement FFT because it is slower than what I thought. Sage might have relevant tools, but most of them require <span class="math inline">\(n\)</span> to be a prime. Ironically, in RSA setting, if they found out that a number does not have a modular inverse modulo <span class="math inline">\(n\)</span>, that would be even better.</p>
+<p>I also didn't think about the complexity of the above method but just make a rough estimation of <span class="math inline">\(O(d^4)\)</span>. FFT can improve the complexity, but the purpose of the article is just to share this idea. Also, it is still a problem to generalize this to <span class="math inline">\(n\)</span> variables as now it only works with constant number of variables.</p>
 
             </div>
 
             <!-- Post information -->
             
-    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 post-tags">
-        
-            <i class="fas fa-tag" style="vertical-align: middle;font-size: .8rem;"></i>
-            tags:&nbsp;
-            
-            
-        
-            <a href="/ctf-note/tags/tutorial/">#tutorial</a>
-        
-    </div>
-
             
     <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
         <ul class="pagination d-block text-center">
             
-                <li class="previous page-item d-inline"><a href="/ctf-note/2021/08/22/corCTF-2021/" class="page-link float-left">&larr;  Newer Posts</a></li>
             
-            
-                <li class="next page-item d-inline"><a href="/ctf-note/2021/08/01/Elliptic-Curve-Form/" class="page-link float-right">Older Posts  &rarr;</a></li>
+                <li class="next page-item d-inline"><a href="/ctf-note/2021/12/21/Elliptic-Curve-Basics/" class="page-link float-right">Older Posts  &rarr;</a></li>
             
         </ul>
     </div>
