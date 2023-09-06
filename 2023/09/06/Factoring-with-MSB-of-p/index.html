@@ -217,11 +217,11 @@
 <h2 id="solution">Solution</h2>
 <p>第一步可以從 maple 偷 flatter 優化版的 <a target="_blank" rel="noopener" href="https://blog.maple3142.net/2023/06/12/seetf-2023-writeups/#shard">small_roots</a>，我雖然沒有實際比較過差多少，但真的差很多。</p>
 <p>接下來不論要爆搜多少，都需要面臨決定參數的問題。過去的我非常糾結參數的正確性，看到隊友搞了 <span class="math inline">\(\beta=0.38\)</span> 之後快中風了，但實際上能找到roots的都是好參數。後來學習了 <a target="_blank" rel="noopener" href="https://connor-mccartney.github.io/cryptography/small-roots/push-it-to-the-limit-WACON-2023-prequal">ConnorM's blog</a> 之後覺得很有道理 – 不論怎麼調 <span class="math inline">\(\beta, \epsilon\)</span>，最後有影響的都是決定矩陣大小的 <span class="math inline">\(m, t\)</span>，既然沒有要追求理論值乾脆直接調 <span class="math inline">\(m\)</span> 就行了。於是我照著跑 ConnorM的script，我家MBP 2017得到了差不多的數字：</p>
-<p><div class="img-item" data-src="https://hackmd.io/_uploads/B1pG9g8An.png" data-sub-html=".caption"><img src="https://hackmd.io/_uploads/B1pG9g8An.png" /></div></p>
+<p><div class="img-item" data-src="https://imgur.com/uBIkZUG" data-sub-html=".caption"><img src="https://imgur.com/uBIkZUG" /></div></p>
 <p>事情似乎到這裡就結束了，加速small_roots，找到好參數，還有什麼可以做的？然而...</p>
 <h2 id="final-optimization">Final optimization</h2>
 <p>比起真的爆搜 bits ，其實質數還是有點結構可以拿來利用。最常見的操作是利用質數是奇數把 <span class="math inline">\(f = p_msb + x\)</span> 改成 <span class="math inline">\(f = p_msb + 2 * x + 1\)</span> ，減少1 bit的負擔。同樣的道理，我們能說 <span class="math inline">\(p\)</span> 不是 <span class="math inline">\(3\)</span> 的倍數，但因為有兩種可能所以不是很能列成式子，只能各自跑。然而這件事提醒了我，比起爆搜bit不如去爆搜 <span class="math inline">\(p%c\)</span> ，其中<span class="math inline">\(c\)</span> 是小質數的積。實際測試之後的結果是：</p>
-<p><div class="img-item" data-src="https://hackmd.io/_uploads/r1hMqlUAn.png" data-sub-html=".caption"><img src="https://hackmd.io/_uploads/r1hMqlUAn.png" /></div></p>
+<p><div class="img-item" data-src="https://imgur.com/oozZ0ke" data-sub-html=".caption"><img src="https://imgur.com/oozZ0ke" /></div></p>
 <p><span class="math inline">\(c = 210\)</span> 的狀況下只有48種餘數需要處理，也就相當於大概四到五倍的加速，實際用的多項式是<code>f = constant + 210 * x + i</code>，其中 <code>constant</code> 刻意改成 210 的倍數會讓世界美好許多。其他細節留給讀者做練習。</p>
 
             </div>
