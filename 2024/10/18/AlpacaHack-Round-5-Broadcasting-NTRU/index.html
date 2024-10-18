@@ -215,22 +215,23 @@
 <p>The author also provides a link to the <a
 target="_blank" rel="noopener" href="https://eprint.iacr.org/2011/590">paper</a> that describes a
 broadcasting attack on NTRU.</p>
-<h2 id="quick-recap-on-the-paper">Quick recap on the paper</h2>
+<h2 id="quick-recap-of-the-paper">Quick recap of the paper</h2>
 <p>The encryption of NTRU is</p>
 <p><span class="math display">\[\mathbf{c} = \mathbf{H}\mathbf{r} +
 \mathbf{m} \pmod{q}\]</span></p>
-<p>where <span class="math inline">\(H\)</span> is the public key (in
-the form of a ciruclar matrix) and <span
-class="math inline">\(r\)</span> is the nonce. Define <span
+<p>where <span class="math inline">\(\mathbf{H}\)</span> is the public
+key (in the form of a ciruclar matrix) and <span
+class="math inline">\(\mathbf{r}\)</span> is the nonce. Define <span
 class="math inline">\(\mathbf{\hat{H}} = \mathbf{H}^{-1}\)</span> and
 <span class="math inline">\(\mathbf{b} =
 \mathbf{H}^{-1}\mathbf{c}\)</span>. If <span
 class="math inline">\(\mathbf{r}^T\mathbf{r}\)</span> is known, we
 have</p>
 <p><span class="math display">\[\mathbf{r}^T\mathbf{r} = (\mathbf{b} -
-\mathbf{\hat{H}}m)^T(\mathbf{b} - \mathbf{\hat{H}}m) =
-\mathbf{b}^T\mathbf{b} - 2b\mathbf{b}^T\mathbf{\hat{H}}\mathbf{m} +
-\mathbf{m}^T\mathbf{\hat{H}}^T\mathbf{\hat{H}}\mathbf{m}\]</span></p>
+\mathbf{\hat{H}}\mathbf{m})^T(\mathbf{b} - \mathbf{\hat{H}}\mathbf{m}) =
+\mathbf{b}^T\mathbf{b} -
+2\mathbf{b}\mathbf{b}^T\mathbf{\hat{H}}\mathbf{m} +
+\mathbf{m}^T\mathbf{\hat{H^T}}\mathbf{\hat{H}}\mathbf{m}\]</span></p>
 <p>This is a quadratic equation with variable <span
 class="math inline">\(\mathbf{m}\)</span>. If we use our usual
 linearization techinique, we will end up with a quadratic number of
