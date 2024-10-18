@@ -212,44 +212,141 @@
                 
                 <p>( 尚須改進 )</p>
 <h2 id="intro">Intro</h2>
-<p>令一條橢圓曲線 <span class="math inline">\(E: y^2 = x^3 + ax + b\)</span> 模 <span class="math inline">\(p\)</span> 下的解個數為 <span class="math inline">\(|E|\)</span>，則 <span class="math inline">\(|E - (p + 1)| \le 2 \sqrt{p}\)</span> (<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Hasse%27s_theorem_on_elliptic_curves">Hasse's Theorem</a>)，如果 <span class="math inline">\(|E|\)</span> 的質因數都很小的話 (smooth number)，離散對數很容易被 Pohlig-Hellman 破解，這建議我們使用那些 <span class="math inline">\(|E|\)</span> 是質數的橢圓曲線。但如果 <span class="math inline">\(|E| = p\)</span> 時，這種曲線被叫做 anomalous curve，且 Smart's Attack 可以很輕易的計算這種曲線的離散對數。</p>
+<p>令一條橢圓曲線 <span class="math inline">\(E: y^2 = x^3 + ax +
+b\)</span> 模 <span class="math inline">\(p\)</span> 下的解個數為 <span
+class="math inline">\(|E|\)</span>，則 <span class="math inline">\(|E -
+(p + 1)| \le 2 \sqrt{p}\)</span> (<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Hasse%27s_theorem_on_elliptic_curves">Hasse's
+Theorem</a>)，如果 <span class="math inline">\(|E|\)</span>
+的質因數都很小的話 (smooth number)，離散對數很容易被 Pohlig-Hellman
+破解，這建議我們使用那些 <span class="math inline">\(|E|\)</span>
+是質數的橢圓曲線。但如果 <span class="math inline">\(|E| = p\)</span>
+時，這種曲線被叫做 anomalous curve，且 Smart's Attack
+可以很輕易的計算這種曲線的離散對數。</p>
 <h2 id="定義域">定義域</h2>
-<p>平常利用橢圓曲線加密時，我們都只考慮 <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> 座標模 <span class="math inline">\(p\)</span>，但是如果也想模 <span class="math inline">\(p^2\)</span>, <span class="math inline">\(p^3\)</span> 或更高的次方呢？我們可以把所有整數寫成 <span class="math inline">\(p\)</span> 進位，也就是</p>
-<p><span class="math display">\[a_0 + a_1p + a_2p^2 + \cdots\]</span></p>
-<p>其中 <span class="math inline">\(a_i\)</span> 是介於 <span class="math inline">\(0\)</span> 到 <span class="math inline">\((p-1)\)</span> 之間的整數，在模 <span class="math inline">\(p^k\)</span> 時就只需考慮前 <span class="math inline">\(k\)</span> 項。那我們該如何表示 <span class="math inline">\(-1\)</span> 呢？如果 <span class="math inline">\(p = 3\)</span>，我們可以表示成</p>
-<p><span class="math display">\[2 + 2 \cdot 3 + 2 \cdot 3^2 + \cdots\]</span></p>
-<p>雖然這個級數不會收斂，可是在模 <span class="math inline">\(p^k\)</span> 的情況下後面的高次項會被刪掉，所以不用擔心收斂的問題。至於有理數的話則寫成</p>
-<p><span class="math display">\[a_{-k}p^{-k}+ \cdots + a_{-2} p^{-2} + a_{-1}p + a_0 + a_1 p + a_2 p^2 + \cdots\]</span></p>
-<p>我們只考慮有限小數，所以 <span class="math inline">\(p=3\)</span> 時，<span class="math inline">\(0.5\)</span> 是不存在的。有了負數次方的擴展，模 <span class="math inline">\(p^{-k}\)</span> 次方就可以定義成把所有高次項刪掉後得到的數字。</p>
-<p>由於我們只是換個數字的表達方式，橢圓曲線的方程式不用改。例如說 <span class="math inline">\(p=3\)</span> 時，曲線 <span class="math inline">\(E: y^2 = x^3 + 14x + 1\)</span> 原來有六個點 <span class="math inline">\((0,\,\pm 1)\)</span>, <span class="math inline">\((1,\,\pm 1)\)</span>, <span class="math inline">\((2,\,\pm 1)\)</span>。但現在，<span class="math inline">\((1,\,1)\)</span> 雖然滿足</p>
-<p><span class="math display">\[y^2 = x^3 + 14x + 1 \pmod {p}\]</span></p>
+<p>平常利用橢圓曲線加密時，我們都只考慮 <span
+class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>
+座標模 <span class="math inline">\(p\)</span>，但是如果也想模 <span
+class="math inline">\(p^2\)</span>, <span
+class="math inline">\(p^3\)</span>
+或更高的次方呢？我們可以把所有整數寫成 <span
+class="math inline">\(p\)</span> 進位，也就是</p>
+<p><span class="math display">\[a_0 + a_1p + a_2p^2 +
+\cdots\]</span></p>
+<p>其中 <span class="math inline">\(a_i\)</span> 是介於 <span
+class="math inline">\(0\)</span> 到 <span
+class="math inline">\((p-1)\)</span> 之間的整數，在模 <span
+class="math inline">\(p^k\)</span> 時就只需考慮前 <span
+class="math inline">\(k\)</span> 項。那我們該如何表示 <span
+class="math inline">\(-1\)</span> 呢？如果 <span class="math inline">\(p
+= 3\)</span>，我們可以表示成</p>
+<p><span class="math display">\[2 + 2 \cdot 3 + 2 \cdot 3^2 +
+\cdots\]</span></p>
+<p>雖然這個級數不會收斂，可是在模 <span
+class="math inline">\(p^k\)</span>
+的情況下後面的高次項會被刪掉，所以不用擔心收斂的問題。至於有理數的話則寫成</p>
+<p><span class="math display">\[a_{-k}p^{-k}+ \cdots + a_{-2} p^{-2} +
+a_{-1}p + a_0 + a_1 p + a_2 p^2 + \cdots\]</span></p>
+<p>我們只考慮有限小數，所以 <span class="math inline">\(p=3\)</span>
+時，<span class="math inline">\(0.5\)</span>
+是不存在的。有了負數次方的擴展，模 <span
+class="math inline">\(p^{-k}\)</span>
+次方就可以定義成把所有高次項刪掉後得到的數字。</p>
+<p>由於我們只是換個數字的表達方式，橢圓曲線的方程式不用改。例如說 <span
+class="math inline">\(p=3\)</span> 時，曲線 <span
+class="math inline">\(E: y^2 = x^3 + 14x + 1\)</span> 原來有六個點 <span
+class="math inline">\((0,\,\pm 1)\)</span>, <span
+class="math inline">\((1,\,\pm 1)\)</span>, <span
+class="math inline">\((2,\,\pm 1)\)</span>。但現在，<span
+class="math inline">\((1,\,1)\)</span> 雖然滿足</p>
+<p><span class="math display">\[y^2 = x^3 + 14x + 1 \pmod
+{p}\]</span></p>
 <p>但不滿足</p>
-<p><span class="math display">\[y^2 = x^3 + 14x + 1 \pmod {p^2}\]</span></p>
-<p>所以 <span class="math inline">\((1,\,1)\)</span> 不是曲線上的點。而 <span class="math inline">\((2 + 2 \cdot 3 + 2 \cdot 3^2 + \cdots,\,1 + 1\cdot 3)\)</span> 和 <span class="math inline">\((1 + 2\cdot 3,\,2 + 1 \cdot 3 + 1 \cdot 3^2)\)</span> 滿足方程式，所以是一個曲線上的點。</p>
-<p>對於這個新系統，一種不錯的看待方式是把 <span class="math inline">\(p\)</span> 想成是一個很小的正數，像是剛剛 <span class="math inline">\(-1\)</span> 的無窮級數中，我們把所有的 <span class="math inline">\(3\)</span> 換成 <span class="math inline">\(0.1\)</span>： <span class="math display">\[2 + 2 \cdot 0.1 + 2 \cdot (0.1)^2 + \cdots\]</span> 那收斂就不會有問題，而模 <span class="math inline">\(p^k\)</span> 就是無條件捨去到第 <span class="math inline">\(k\)</span> 位。</p>
-<p>我們稱呼原來模 <span class="math inline">\(p\)</span> 時的曲線 <span class="math inline">\(E(F_p)\)</span>，而擴展之後的曲線 <span class="math inline">\(E(Q_p)\)</span>，注意到前者只有 <span class="math inline">\(p\)</span> 個點 (因為是 anomalous curve)，但後者有無窮多個點。</p>
+<p><span class="math display">\[y^2 = x^3 + 14x + 1 \pmod
+{p^2}\]</span></p>
+<p>所以 <span class="math inline">\((1,\,1)\)</span> 不是曲線上的點。而
+<span class="math inline">\((2 + 2 \cdot 3 + 2 \cdot 3^2 + \cdots,\,1 +
+1\cdot 3)\)</span> 和 <span class="math inline">\((1 + 2\cdot 3,\,2 + 1
+\cdot 3 + 1 \cdot 3^2)\)</span> 滿足方程式，所以是一個曲線上的點。</p>
+<p>對於這個新系統，一種不錯的看待方式是把 <span
+class="math inline">\(p\)</span> 想成是一個很小的正數，像是剛剛 <span
+class="math inline">\(-1\)</span> 的無窮級數中，我們把所有的 <span
+class="math inline">\(3\)</span> 換成 <span
+class="math inline">\(0.1\)</span>： <span class="math display">\[2 + 2
+\cdot 0.1 + 2 \cdot (0.1)^2 + \cdots\]</span> 那收斂就不會有問題，而模
+<span class="math inline">\(p^k\)</span> 就是無條件捨去到第 <span
+class="math inline">\(k\)</span> 位。</p>
+<p>我們稱呼原來模 <span class="math inline">\(p\)</span> 時的曲線 <span
+class="math inline">\(E(F_p)\)</span>，而擴展之後的曲線 <span
+class="math inline">\(E(Q_p)\)</span>，注意到前者只有 <span
+class="math inline">\(p\)</span> 個點 (因為是 anomalous
+curve)，但後者有無窮多個點。</p>
 <h2 id="擴展">擴展</h2>
-<p>換了數字的表達方式後，有些點似乎不見了，例如剛剛說的 <span class="math inline">\((1, \, 1)\)</span> 並不在曲線 <span class="math inline">\(E: y^2 = x^3 + 14x + 1\)</span> 上，因為模 <span class="math inline">\(p^2\)</span> 的時候等號不成立，然而實際上這些點並沒有不見。一開始我們說 <span class="math inline">\((1, \, 1)\)</span> 在曲線上時，意思是 <span class="math inline">\((1,\,1)\)</span> 是</p>
-<p><span class="math display">\[y^2 \equiv x^3 + ax + b \pmod{p}\]</span></p>
-<p>的解，但我們沒有說 <span class="math inline">\((1,\, 1)\)</span> 究竟是 <span class="math inline">\((1, \, 1)\)</span> 還是 <span class="math inline">\((1 + p, \, 1)\)</span> 又或是 <span class="math inline">\((1 + 2p, \, 1)\)</span>，這些點在 <span class="math inline">\(E(F_p)\)</span> 裡是同個點，但在 <span class="math inline">\(E(Q_p)\)</span> 時卻不一樣，所以如果有一個 <span class="math inline">\((1 + kp, \, 1)\)</span> 在 <span class="math inline">\(E(Q_p)\)</span> 裡面，那 <span class="math inline">\((1, \, 1)\)</span> 並沒有消失，只是換了一個型態。</p>
-<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Hensel%27s_lemma">Hansel's Lemma</a> 告訴我們這些點真的沒有消失。用同樣的例子，我們想要找到 <span class="math inline">\(k\)</span> 使得 <span class="math inline">\((1 + kp, \, 1)\)</span> 是 <span class="math display">\[y^2 = x^3 + 14x + 1 \pmod{p^2}\]</span> 的解，也就是說 <span class="math display">\[1 \equiv  (1 + kp)^3 + 14(1 + kp) + 1 \pmod{p^2}\]</span> 這是一個 <span class="math inline">\(kp\)</span> 的多項式，常數項一定會消成 <span class="math inline">\(p\)</span> 的倍數，然後 <span class="math inline">\((kp)\)</span> 二次方以上的都可以直接消掉，最後得到 <span class="math display">\[17 kp \equiv -15 \pmod {p^2}\]</span> 只有恰好一個 <span class="math inline">\(k\)</span> 滿足條件，所以我可以找到一個點 <span class="math inline">\((1 + kp, \, 1)\)</span>在模 <span class="math inline">\(p^2\)</span>的時候是正確的，同樣的方法可以找到 <span class="math inline">\((1 + kp + k&#39;p^2, 1)\)</span> 模 <span class="math inline">\(p^3\)</span> 時是正確的，然後一直往上推。總結來說，所有 <span class="math inline">\(E(F_p)\)</span> 的點都可以擴展成 <span class="math inline">\(E(Q_p)\)</span> 的點。</p>
-<p>反過來的話，從 <span class="math inline">\(E(Q_p)\)</span> 的點轉換成 <span class="math inline">\(E(F_p)\)</span> 只需要模 <span class="math inline">\(p\)</span>，照著前面的比喻的話也就是無條件捨去到第一位，而那些有 <span class="math inline">\(p\)</span> 的負數次方的數字，就全部當成 <span class="math inline">\(E(F_p)\)</span> 中的無窮遠點 <span class="math inline">\(O\)</span>。下面的轉換表格使用同樣的曲線且 <span class="math inline">\(p = 3\)</span>。</p>
+<p>換了數字的表達方式後，有些點似乎不見了，例如剛剛說的 <span
+class="math inline">\((1, \, 1)\)</span> 並不在曲線 <span
+class="math inline">\(E: y^2 = x^3 + 14x + 1\)</span> 上，因為模 <span
+class="math inline">\(p^2\)</span>
+的時候等號不成立，然而實際上這些點並沒有不見。一開始我們說 <span
+class="math inline">\((1, \, 1)\)</span> 在曲線上時，意思是 <span
+class="math inline">\((1,\,1)\)</span> 是</p>
+<p><span class="math display">\[y^2 \equiv x^3 + ax + b
+\pmod{p}\]</span></p>
+<p>的解，但我們沒有說 <span class="math inline">\((1,\, 1)\)</span>
+究竟是 <span class="math inline">\((1, \, 1)\)</span> 還是 <span
+class="math inline">\((1 + p, \, 1)\)</span> 又或是 <span
+class="math inline">\((1 + 2p, \, 1)\)</span>，這些點在 <span
+class="math inline">\(E(F_p)\)</span> 裡是同個點，但在 <span
+class="math inline">\(E(Q_p)\)</span> 時卻不一樣，所以如果有一個 <span
+class="math inline">\((1 + kp, \, 1)\)</span> 在 <span
+class="math inline">\(E(Q_p)\)</span> 裡面，那 <span
+class="math inline">\((1, \, 1)\)</span>
+並沒有消失，只是換了一個型態。</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Hensel%27s_lemma">Hansel's
+Lemma</a> 告訴我們這些點真的沒有消失。用同樣的例子，我們想要找到 <span
+class="math inline">\(k\)</span> 使得 <span class="math inline">\((1 +
+kp, \, 1)\)</span> 是 <span class="math display">\[y^2 = x^3 + 14x + 1
+\pmod{p^2}\]</span> 的解，也就是說 <span class="math display">\[1
+\equiv  (1 + kp)^3 + 14(1 + kp) + 1 \pmod{p^2}\]</span> 這是一個 <span
+class="math inline">\(kp\)</span> 的多項式，常數項一定會消成 <span
+class="math inline">\(p\)</span> 的倍數，然後 <span
+class="math inline">\((kp)\)</span> 二次方以上的都可以直接消掉，最後得到
+<span class="math display">\[17 kp \equiv -15 \pmod {p^2}\]</span>
+只有恰好一個 <span class="math inline">\(k\)</span>
+滿足條件，所以我可以找到一個點 <span class="math inline">\((1 + kp, \,
+1)\)</span>在模 <span
+class="math inline">\(p^2\)</span>的時候是正確的，同樣的方法可以找到
+<span class="math inline">\((1 + kp + k&#39;p^2, 1)\)</span> 模 <span
+class="math inline">\(p^3\)</span>
+時是正確的，然後一直往上推。總結來說，所有 <span
+class="math inline">\(E(F_p)\)</span> 的點都可以擴展成 <span
+class="math inline">\(E(Q_p)\)</span> 的點。</p>
+<p>反過來的話，從 <span class="math inline">\(E(Q_p)\)</span> 的點轉換成
+<span class="math inline">\(E(F_p)\)</span> 只需要模 <span
+class="math inline">\(p\)</span>，照著前面的比喻的話也就是無條件捨去到第一位，而那些有
+<span class="math inline">\(p\)</span> 的負數次方的數字，就全部當成
+<span class="math inline">\(E(F_p)\)</span> 中的無窮遠點 <span
+class="math inline">\(O\)</span>。下面的轉換表格使用同樣的曲線且 <span
+class="math inline">\(p = 3\)</span>。</p>
 <div class="table-responsive">
 <table class="table table-bordered table-striped">
 <thead>
 <tr class="header">
-<th style="text-align: center;"><span class="math inline">\(E(F_p)\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(E(Q_p)\)</span></th>
+<th style="text-align: center;"><span
+class="math inline">\(E(F_p)\)</span></th>
+<th style="text-align: center;"><span
+class="math inline">\(E(Q_p)\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">(-1, 1)</td>
-<td style="text-align: center;">(2 + 6 + 18 + <span class="math inline">\(\cdots\)</span>, 1 + 3)</td>
+<td style="text-align: center;">(2 + 6 + 18 + <span
+class="math inline">\(\cdots\)</span>, 1 + 3)</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">(-1, 1)</td>
-<td style="text-align: center;">(1 + 6 + 9 + 18 + <span class="math inline">\(\cdots\)</span>, 1)</td>
+<td style="text-align: center;">(1 + 6 + 9 + 18 + <span
+class="math inline">\(\cdots\)</span>, 1)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">(1, 1)</td>
@@ -261,60 +358,215 @@
 </tr>
 </tbody>
 </table></div>
-<p>可以發現 <span class="math inline">\(E(F_p)\)</span> 中同樣的點可以對應到好幾種 <span class="math inline">\(E(Q_p)\)</span> 的點，剛剛上面提到的方法 (Hansel's Lemma) 只是給我們其中一個可能。另外在 <span class="math inline">\(E(Q_p)\)</span> 中不管什麼點，只要乘上常數 <span class="math inline">\(|E|\)</span> 就一定會出現負數次方，神奇吧！</p>
-<p>這樣的轉換並不會影響橢圓曲線的加法，原來的離散對數是找到 <span class="math inline">\(n\)</span> 使得 <span class="math inline">\(Q = nP\)</span> 且 <span class="math inline">\(P, Q \in E(F_p)\)</span>，現在只需先把 <span class="math inline">\(P\)</span>, <span class="math inline">\(Q\)</span> 拓展成 <span class="math inline">\(P&#39;\)</span>, <span class="math inline">\(Q&#39;\)</span>，然後找到 <span class="math inline">\(n\)</span> 滿足 <span class="math inline">\(Q&#39; - nP&#39; = O&#39;\)</span>，其中 <span class="math inline">\(O&#39;\)</span> 是某個非整數點。之後的討論我們都聚焦在 <span class="math inline">\(E(Q_p)\)</span> 上。</p>
+<p>可以發現 <span class="math inline">\(E(F_p)\)</span>
+中同樣的點可以對應到好幾種 <span class="math inline">\(E(Q_p)\)</span>
+的點，剛剛上面提到的方法 (Hansel's Lemma) 只是給我們其中一個可能。另外在
+<span class="math inline">\(E(Q_p)\)</span> 中不管什麼點，只要乘上常數
+<span class="math inline">\(|E|\)</span>
+就一定會出現負數次方，神奇吧！</p>
+<p>這樣的轉換並不會影響橢圓曲線的加法，原來的離散對數是找到 <span
+class="math inline">\(n\)</span> 使得 <span class="math inline">\(Q =
+nP\)</span> 且 <span class="math inline">\(P, Q \in
+E(F_p)\)</span>，現在只需先把 <span class="math inline">\(P\)</span>,
+<span class="math inline">\(Q\)</span> 拓展成 <span
+class="math inline">\(P&#39;\)</span>, <span
+class="math inline">\(Q&#39;\)</span>，然後找到 <span
+class="math inline">\(n\)</span> 滿足 <span class="math inline">\(Q&#39;
+- nP&#39; = O&#39;\)</span>，其中 <span
+class="math inline">\(O&#39;\)</span>
+是某個非整數點。之後的討論我們都聚焦在 <span
+class="math inline">\(E(Q_p)\)</span> 上。</p>
 <h2 id="參數化">參數化</h2>
 <p>橢圓曲線雖然沒辦法用很簡單的式子參數化，但我們可以用類似泰勒展開的形式寫成無窮級數，讓所有東西回歸我們熟悉的多項式。</p>
-<p>考慮 <span class="math inline">\(y^2 = x^3 + ax + b\)</span>，我們可以把它換成 <span class="math inline">\(x = \frac{-x^3 + (y^2 - b)}{a}\)</span>，然後透過不斷的代入得到新的式子，例如說代入一次得到的是</p>
-<p><span class="math display">\[x = \frac{1}{a}\left(-\left(\frac{-x^3 + (y^2 - b)}{a}\right)^3 + (y^2 - b)\right)\]</span></p>
-<p>我們期待不斷代入的過程可以讓右式中的 <span class="math inline">\(x\)</span> 次數越來越大，最後整個式子會收斂成某個 <span class="math inline">\(x = f(y)\)</span>，然而這樣的操作卻只是一團糟 — 如果 <span class="math inline">\(a = 0\)</span> 就直接爆炸，就算 <span class="math inline">\(a \ne 0\)</span>，( 對 <span class="math inline">\(x\)</span> 來說的 ) 常數項一開始是 <span class="math inline">\(\frac{y^2 - b}{a}\)</span>，代入一次後多了 <span class="math inline">\(-\frac{1}{a}\left(\frac{y^2 - b}{a}\right)^3\)</span>，代入次數越多，常數項也越來越多。</p>
-<p>我們可以透過改寫式子解決這個問題。令 <span class="math inline">\(w = \frac{-1}{y}\)</span>, <span class="math inline">\(z = \frac{-x}{y}\)</span>，我們可以把式子改寫成</p>
+<p>考慮 <span class="math inline">\(y^2 = x^3 + ax +
+b\)</span>，我們可以把它換成 <span class="math inline">\(x = \frac{-x^3
++ (y^2 -
+b)}{a}\)</span>，然後透過不斷的代入得到新的式子，例如說代入一次得到的是</p>
+<p><span class="math display">\[x = \frac{1}{a}\left(-\left(\frac{-x^3 +
+(y^2 - b)}{a}\right)^3 + (y^2 - b)\right)\]</span></p>
+<p>我們期待不斷代入的過程可以讓右式中的 <span
+class="math inline">\(x\)</span> 次數越來越大，最後整個式子會收斂成某個
+<span class="math inline">\(x =
+f(y)\)</span>，然而這樣的操作卻只是一團糟 — 如果 <span
+class="math inline">\(a = 0\)</span> 就直接爆炸，就算 <span
+class="math inline">\(a \ne 0\)</span>，( 對 <span
+class="math inline">\(x\)</span> 來說的 ) 常數項一開始是 <span
+class="math inline">\(\frac{y^2 - b}{a}\)</span>，代入一次後多了 <span
+class="math inline">\(-\frac{1}{a}\left(\frac{y^2 -
+b}{a}\right)^3\)</span>，代入次數越多，常數項也越來越多。</p>
+<p>我們可以透過改寫式子解決這個問題。令 <span class="math inline">\(w =
+\frac{-1}{y}\)</span>, <span class="math inline">\(z =
+\frac{-x}{y}\)</span>，我們可以把式子改寫成</p>
 <p><span class="math display">\[w = z^3 + azw^2 + bw^3\]</span></p>
-<p>這樣的好處是右式的次數都是 <span class="math inline">\(3\)</span>，所以在代入的過程，右式的次數會越滾越大，而不像剛剛每次代入都會產生新的常數項。作為演示，第一次代入後得到</p>
-<p><span class="math display">\[w = z^3 + az\left(z^3+azw^2+bw^3\right)^2 + b\left(z^3+azw^2+bw^3\right)^3\]</span></p>
-<p><span class="math inline">\(z^3\)</span> 是裡面次數最小的，所以 <span class="math inline">\(z^3 \mid w\)</span> (不斷代入並不會產出任何 <span class="math inline">\(1, z, z^2\)</span> 項)，因此</p>
-<p>$<span class="math inline">\(w = z^3 + az^7 + 2az^5w^2 + bz^6 + z^12(\cdots)\)</span></p>
-<p>可以發現我們已經幾乎推出前 <span class="math inline">\(12\)</span> 個係數了。最後我們宣稱能找到一個橢圓曲線的參數式 <span class="math inline">\(w = f(z)\)</span>。雖然 <span class="math inline">\(f(z)\)</span> 是無窮多項的多項式，而且不太可能收斂，但如果 <span class="math inline">\(z\)</span> 是 <span class="math inline">\(p\)</span> 的倍數，那在 <span class="math inline">\(Q_p\)</span> 的世界下這就是收斂的，因為 <span class="math inline">\(p\)</span> 的次數越大數字越小。</p>
+<p>這樣的好處是右式的次數都是 <span
+class="math inline">\(3\)</span>，所以在代入的過程，右式的次數會越滾越大，而不像剛剛每次代入都會產生新的常數項。作為演示，第一次代入後得到</p>
+<p><span class="math display">\[w = z^3 +
+az\left(z^3+azw^2+bw^3\right)^2 +
+b\left(z^3+azw^2+bw^3\right)^3\]</span></p>
+<p><span class="math inline">\(z^3\)</span> 是裡面次數最小的，所以 <span
+class="math inline">\(z^3 \mid w\)</span> (不斷代入並不會產出任何 <span
+class="math inline">\(1, z, z^2\)</span> 項)，因此</p>
+<p>$<span class="math inline">\(w = z^3 + az^7 + 2az^5w^2 + bz^6 +
+z^12(\cdots)\)</span></p>
+<p>可以發現我們已經幾乎推出前 <span class="math inline">\(12\)</span>
+個係數了。最後我們宣稱能找到一個橢圓曲線的參數式 <span
+class="math inline">\(w = f(z)\)</span>。雖然 <span
+class="math inline">\(f(z)\)</span>
+是無窮多項的多項式，而且不太可能收斂，但如果 <span
+class="math inline">\(z\)</span> 是 <span
+class="math inline">\(p\)</span> 的倍數，那在 <span
+class="math inline">\(Q_p\)</span> 的世界下這就是收斂的，因為 <span
+class="math inline">\(p\)</span> 的次數越大數字越小。</p>
 <h2 id="isomorphism">Isomorphism</h2>
-<p>有了參數化後我們可以用 <span class="math inline">\(P(z)\)</span> 來代表一個橢圓曲線上的點 <span class="math inline">\((\frac{z}{f(z)}, \frac{-1}{f(z)})\)</span>，我們的目標是找到函數 <span class="math inline">\(\phi: \mathbb{Q} \to \mathbb{Q}\)</span> 使得</p>
-<p><span class="math display">\[P(z_1) + P(z_2) = P(z_3) \Leftrightarrow \phi(z_1) + \phi(z_2) = \phi(z_3)\]</span></p>
+<p>有了參數化後我們可以用 <span class="math inline">\(P(z)\)</span>
+來代表一個橢圓曲線上的點 <span class="math inline">\((\frac{z}{f(z)},
+\frac{-1}{f(z)})\)</span>，我們的目標是找到函數 <span
+class="math inline">\(\phi: \mathbb{Q} \to \mathbb{Q}\)</span> 使得</p>
+<p><span class="math display">\[P(z_1) + P(z_2) = P(z_3) \Leftrightarrow
+\phi(z_1) + \phi(z_2) = \phi(z_3)\]</span></p>
 <p>注意到左邊的加法是橢圓曲線上的加法，而右邊則是大家熟知的加法。換句話說，我們可以把橢圓曲線的加法「轉換」成正常的加法，所以</p>
-<p><span class="math display">\[Q = nP \Leftrightarrow \phi(Q) = n\phi(P)\]</span></p>
-<p>也就是離散對數問題變成簡單的除法：<span class="math inline">\(n = \frac{\phi(P)}{\phi(Q)}\)</span>。如果不是很清楚這個轉換在做什麼，這邊舉個例子：</p>
-<p><span class="math display">\[xy = z \Leftrightarrow \log{x} + \log{y} = \log{z}\]</span></p>
-<p>所以 <span class="math inline">\(\log\)</span> 把乘法「轉換」成加法，而 <span class="math inline">\(\log\)</span> 就是我們要的 <span class="math inline">\(\phi\)</span></p>
+<p><span class="math display">\[Q = nP \Leftrightarrow \phi(Q) =
+n\phi(P)\]</span></p>
+<p>也就是離散對數問題變成簡單的除法：<span class="math inline">\(n =
+\frac{\phi(P)}{\phi(Q)}\)</span>。如果不是很清楚這個轉換在做什麼，這邊舉個例子：</p>
+<p><span class="math display">\[xy = z \Leftrightarrow \log{x} + \log{y}
+= \log{z}\]</span></p>
+<p>所以 <span class="math inline">\(\log\)</span>
+把乘法「轉換」成加法，而 <span class="math inline">\(\log\)</span>
+就是我們要的 <span class="math inline">\(\phi\)</span></p>
 <h2 id="logarithm-formula">Logarithm Formula</h2>
-<p>定義 <span class="math inline">\(F(z_1, z_2) = P^{-1}(P(z_1) + P(z_2))\)</span>，或者說把參數為 <span class="math inline">\(z_1\)</span> 的點加上參數為 <span class="math inline">\(z_2\)</span> 的點會得到參數為 <span class="math inline">\(F(z_1, z_2)\)</span> 的點。上述的目標可以改寫成</p>
-<p><span class="math display">\[F(x, y) = z \Leftrightarrow \phi(x) + \phi(y) = \phi(z)\]</span></p>
-<p>如同前面的參數化，<span class="math inline">\(F\)</span> 也可以用泰勒展開表達成 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span> 的無窮多項式</p>
-<p><span class="math display">\[F(x, y) = F(0, 0) + \frac{\partial F}{\partial x}(0,0)x + \frac{\partial F}{\partial y}(0,0)y + \cdots = x + y + \cdots\]</span></p>
-<p>(<span class="math inline">\(\frac{\partial F}{\partial x}(0,0) = \lim_{dx \to 0}\frac{F(dx, 0) - F(0, 0)}{dx} = 1\)</span>)</p>
-<p>一個神奇的公式告訴我們只要 <span class="math inline">\(F(x, y)\)</span> 滿足</p>
+<p>定義 <span class="math inline">\(F(z_1, z_2) = P^{-1}(P(z_1) +
+P(z_2))\)</span>，或者說把參數為 <span
+class="math inline">\(z_1\)</span> 的點加上參數為 <span
+class="math inline">\(z_2\)</span> 的點會得到參數為 <span
+class="math inline">\(F(z_1, z_2)\)</span>
+的點。上述的目標可以改寫成</p>
+<p><span class="math display">\[F(x, y) = z \Leftrightarrow \phi(x) +
+\phi(y) = \phi(z)\]</span></p>
+<p>如同前面的參數化，<span class="math inline">\(F\)</span>
+也可以用泰勒展開表達成 <span class="math inline">\(x\)</span> 和 <span
+class="math inline">\(y\)</span> 的無窮多項式</p>
+<p><span class="math display">\[F(x, y) = F(0, 0) + \frac{\partial
+F}{\partial x}(0,0)x + \frac{\partial F}{\partial y}(0,0)y + \cdots = x
++ y + \cdots\]</span></p>
+<p>(<span class="math inline">\(\frac{\partial F}{\partial x}(0,0) =
+\lim_{dx \to 0}\frac{F(dx, 0) - F(0, 0)}{dx} = 1\)</span>)</p>
+<p>一個神奇的公式告訴我們只要 <span class="math inline">\(F(x,
+y)\)</span> 滿足</p>
 <ul>
 <li><span class="math inline">\(F(0, x) = F(x, 0) = x\)</span></li>
-<li><span class="math inline">\(F(x, F(y, z)) = F(F(x, y), z)\)</span></li>
+<li><span class="math inline">\(F(x, F(y, z)) = F(F(x, y),
+z)\)</span></li>
 <li><span class="math inline">\(F(x, y) = F(y, x)\)</span></li>
 </ul>
 <p>則可以找到想要的 <span class="math inline">\(\phi\)</span> 函數</p>
-<p><span class="math display">\[\phi_F(x) = \int \frac{1}{\frac{\partial F}{\partial y}(x, 0)}dx\]</span></p>
-<p>注意到分母是一個 <span class="math inline">\(x\)</span> 的多項式，比起真的積分這個多項式的倒數，我們可以利用 <span class="math inline">\(\frac{1}{1 - x} = 1 + x + x^2 + \cdots\)</span> 這個公式來讓要被積分的式子變成無窮多項式。另外積分一定要有積分常數，所以很自然的我們要求 <span class="math inline">\(\phi_F(0) = 0\)</span>。</p>
-<p>舉個簡單的例子：考慮 <span class="math inline">\(F&#39;(x, y) = x + y + xy\)</span>，則 <span class="math inline">\(\frac{\partial F&#39;}{\partial y}(x, 0) = 1 + x\)</span>，所以</p>
-<p><span class="math display">\[\phi_{F&#39;}(x) = \int \frac{1}{1 + x} dx = \int (1 - x + x^2 - x^3 + \cdots)dx = x - \frac{1}{2}x^2 + \frac{1}{3} x^3 - \frac{1}{4}x^4 + \cdots\]</span></p>
-<p>最後得出來的式子其實就是 <span class="math inline">\(\log{(1 + x)}\)</span> 的泰勒展開，而的確 <span class="math inline">\(\phi(x) + \phi(y) = \log{(1+x)(1+y)}=\phi(F&#39;(x, y))\)</span>。</p>
-<p>回頭看 <span class="math inline">\(F(x, y)\)</span> 需要滿足的條件，由第一條我們可以知道 <span class="math inline">\(F(x, y) = x + y + \cdots\)</span>，後面省略的是次數比較高的項，根據第二條， <span class="math inline">\(F\)</span> 有結合率，第三條告訴我們 <span class="math inline">\(F\)</span> 是對稱的。很明顯三項我們都符合，否則橢圓曲線的加法就不是加法了，所以我們可以得到我們要的<span class="math inline">\(\phi\)</span> <span class="math display">\[\phi_F(x) = \int \frac{1}{1 + x(\cdots)}dx = \int 1 + (x(\cdots)) + (x(\cdots))^2 + \cdots dx = x + x^2(\cdots)\]</span></p>
+<p><span class="math display">\[\phi_F(x) = \int \frac{1}{\frac{\partial
+F}{\partial y}(x, 0)}dx\]</span></p>
+<p>注意到分母是一個 <span class="math inline">\(x\)</span>
+的多項式，比起真的積分這個多項式的倒數，我們可以利用 <span
+class="math inline">\(\frac{1}{1 - x} = 1 + x + x^2 + \cdots\)</span>
+這個公式來讓要被積分的式子變成無窮多項式。另外積分一定要有積分常數，所以很自然的我們要求
+<span class="math inline">\(\phi_F(0) = 0\)</span>。</p>
+<p>舉個簡單的例子：考慮 <span class="math inline">\(F&#39;(x, y) = x + y
++ xy\)</span>，則 <span class="math inline">\(\frac{\partial
+F&#39;}{\partial y}(x, 0) = 1 + x\)</span>，所以</p>
+<p><span class="math display">\[\phi_{F&#39;}(x) = \int \frac{1}{1 + x}
+dx = \int (1 - x + x^2 - x^3 + \cdots)dx = x - \frac{1}{2}x^2 +
+\frac{1}{3} x^3 - \frac{1}{4}x^4 + \cdots\]</span></p>
+<p>最後得出來的式子其實就是 <span class="math inline">\(\log{(1 +
+x)}\)</span> 的泰勒展開，而的確 <span class="math inline">\(\phi(x) +
+\phi(y) = \log{(1+x)(1+y)}=\phi(F&#39;(x, y))\)</span>。</p>
+<p>回頭看 <span class="math inline">\(F(x, y)\)</span>
+需要滿足的條件，由第一條我們可以知道 <span class="math inline">\(F(x, y)
+= x + y + \cdots\)</span>，後面省略的是次數比較高的項，根據第二條，
+<span class="math inline">\(F\)</span> 有結合率，第三條告訴我們 <span
+class="math inline">\(F\)</span>
+是對稱的。很明顯三項我們都符合，否則橢圓曲線的加法就不是加法了，所以我們可以得到我們要的<span
+class="math inline">\(\phi\)</span> <span
+class="math display">\[\phi_F(x) = \int \frac{1}{1 + x(\cdots)}dx = \int
+1 + (x(\cdots)) + (x(\cdots))^2 + \cdots dx = x +
+x^2(\cdots)\]</span></p>
 <h2 id="收斂">收斂</h2>
-<p>我們得到了想要的 <span class="math inline">\(\phi\)</span> 但是他不一定會收斂。在 <span class="math inline">\(Q_p\)</span> 的世界下，如果 <span class="math inline">\(p \mid z\)</span> 那級數一定會收斂，因為後面的項都是 <span class="math inline">\(p\)</span> 的好多次方，但如果 <span class="math inline">\(p\nmid z\)</span>，這個級數八成會發散。究竟什麼時候 <span class="math inline">\(z\)</span> 會是 <span class="math inline">\(p\)</span> 的倍數呢？<span class="math inline">\(z\)</span> 的定義是 <span class="math inline">\(\frac{-x}{y}\)</span>，在 <span class="math inline">\(E(F_p)\)</span> 裡只有 <span class="math inline">\(x = 0\)</span> 時 <span class="math inline">\(z\)</span> 才會是 <span class="math inline">\(p\)</span> 的倍數，但是在 <span class="math inline">\(E(Q_p)\)</span> 裡，如果 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span> 不是整數，假設 <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> 在 <span class="math inline">\(p\)</span> 進位中次方最小的分別是 <span class="math inline">\(p^{-a}\)</span>, <span class="math inline">\(p^{-b}\)</span> (<span class="math inline">\(a, b &gt; 0\)</span>)，那觀察橢圓曲線 <span class="math display">\[y^2 = x^3 + ax + b\]</span> 左式最小次方會是 <span class="math inline">\(p^{-2b}\)</span> 而右式是 <span class="math inline">\(p^{-3a}\)</span>，所以 <span class="math inline">\(3a = 2b\)</span>，這保證 <span class="math inline">\(a &lt; b\)</span>，也就是說 <span class="math inline">\(z = \frac{-x}{y}\)</span> 一定是 <span class="math inline">\(p\)</span> 的倍數。</p>
-<p>等一下會用到一個重要的性質：對於非整數點 <span class="math inline">\(P(z)\)</span>，我們有 <span class="math inline">\(\phi(z) = z + z^2(...) \equiv z \pmod{p^2}\)</span>。</p>
+<p>我們得到了想要的 <span class="math inline">\(\phi\)</span>
+但是他不一定會收斂。在 <span class="math inline">\(Q_p\)</span>
+的世界下，如果 <span class="math inline">\(p \mid z\)</span>
+那級數一定會收斂，因為後面的項都是 <span
+class="math inline">\(p\)</span> 的好多次方，但如果 <span
+class="math inline">\(p\nmid
+z\)</span>，這個級數八成會發散。究竟什麼時候 <span
+class="math inline">\(z\)</span> 會是 <span
+class="math inline">\(p\)</span> 的倍數呢？<span
+class="math inline">\(z\)</span> 的定義是 <span
+class="math inline">\(\frac{-x}{y}\)</span>，在 <span
+class="math inline">\(E(F_p)\)</span> 裡只有 <span
+class="math inline">\(x = 0\)</span> 時 <span
+class="math inline">\(z\)</span> 才會是 <span
+class="math inline">\(p\)</span> 的倍數，但是在 <span
+class="math inline">\(E(Q_p)\)</span> 裡，如果 <span
+class="math inline">\(x\)</span> 和 <span
+class="math inline">\(y\)</span> 不是整數，假設 <span
+class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>
+在 <span class="math inline">\(p\)</span> 進位中次方最小的分別是 <span
+class="math inline">\(p^{-a}\)</span>, <span
+class="math inline">\(p^{-b}\)</span> (<span class="math inline">\(a, b
+&gt; 0\)</span>)，那觀察橢圓曲線 <span class="math display">\[y^2 = x^3
++ ax + b\]</span> 左式最小次方會是 <span
+class="math inline">\(p^{-2b}\)</span> 而右式是 <span
+class="math inline">\(p^{-3a}\)</span>，所以 <span
+class="math inline">\(3a = 2b\)</span>，這保證 <span
+class="math inline">\(a &lt; b\)</span>，也就是說 <span
+class="math inline">\(z = \frac{-x}{y}\)</span> 一定是 <span
+class="math inline">\(p\)</span> 的倍數。</p>
+<p>等一下會用到一個重要的性質：對於非整數點 <span
+class="math inline">\(P(z)\)</span>，我們有 <span
+class="math inline">\(\phi(z) = z + z^2(...) \equiv z
+\pmod{p^2}\)</span>。</p>
 <h2 id="smarts-attack">Smart's Attack</h2>
-<p>當初計算 <span class="math inline">\(\phi\)</span> 是為了計算離散對數，然而 <span class="math inline">\(\phi\)</span> 卻只在非整數點上有定義，所以為了找出 <span class="math inline">\(Q&#39; - nP&#39; = O&#39;\)</span> 的 <span class="math inline">\(n\)</span>，直接計算 <span class="math inline">\(\frac{\phi(Q&#39;)}{\phi(P&#39;)}\)</span> 是不行的，但是我們可以把整個式子乘上 <span class="math inline">\(p\)</span> 倍，也就是 <span class="math display">\[pQ&#39; - npP&#39; = pO&#39;\]</span> 所以 <span class="math display">\[\phi(pQ&#39;) - n \phi(pP&#39;) = p \phi(O&#39;)\]</span> 利用 <span class="math inline">\(\phi(P(z)) \equiv z \pmod{p^2}\)</span>，我們可以得到 <span class="math display">\[n \equiv \frac{\phi(pQ&#39;)}{\phi(pP&#39;)} \equiv \frac{P^{-1}(pQ&#39;)}{P^{-1}(pP&#39;)} \pmod{p}\]</span> 注意到最後的分數要先在<span class="math inline">\(\bmod p^2\)</span>下約掉一個<span class="math inline">\(p\)</span>才可以記算。總結來說，Smart's Attack 的想法如下：</p>
+<p>當初計算 <span class="math inline">\(\phi\)</span>
+是為了計算離散對數，然而 <span class="math inline">\(\phi\)</span>
+卻只在非整數點上有定義，所以為了找出 <span class="math inline">\(Q&#39;
+- nP&#39; = O&#39;\)</span> 的 <span
+class="math inline">\(n\)</span>，直接計算 <span
+class="math inline">\(\frac{\phi(Q&#39;)}{\phi(P&#39;)}\)</span>
+是不行的，但是我們可以把整個式子乘上 <span
+class="math inline">\(p\)</span> 倍，也就是 <span
+class="math display">\[pQ&#39; - npP&#39; = pO&#39;\]</span> 所以 <span
+class="math display">\[\phi(pQ&#39;) - n \phi(pP&#39;) = p
+\phi(O&#39;)\]</span> 利用 <span class="math inline">\(\phi(P(z)) \equiv
+z \pmod{p^2}\)</span>，我們可以得到 <span class="math display">\[n
+\equiv \frac{\phi(pQ&#39;)}{\phi(pP&#39;)} \equiv
+\frac{P^{-1}(pQ&#39;)}{P^{-1}(pP&#39;)} \pmod{p}\]</span>
+注意到最後的分數要先在<span class="math inline">\(\bmod
+p^2\)</span>下約掉一個<span
+class="math inline">\(p\)</span>才可以記算。總結來說，Smart's Attack
+的想法如下：</p>
 <ul>
-<li>將 <span class="math inline">\(P\)</span>, <span class="math inline">\(Q\)</span> 擴充成 <span class="math inline">\(E(Q_p)\)</span> 下的點 <span class="math inline">\(P&#39;\)</span>, <span class="math inline">\(Q&#39;\)</span>，我們要找到 <span class="math inline">\(n\)</span> 使得 <span class="math inline">\(O&#39; = Q&#39;-nP&#39;\)</span> 不是整數點。</li>
-<li>為了套上 <span class="math inline">\(\phi\)</span>，我們把式子乘上 <span class="math inline">\(p\)</span> 倍，得到 <span class="math inline">\(pO&#39; = pQ&#39; - npP&#39;\)</span>。</li>
-<li>套上 <span class="math inline">\(\phi\)</span> 函數得到，<span class="math inline">\(n \equiv \frac{\phi(pQ&#39;)}{\phi(pP&#39;)} \pmod p\)</span></li>
+<li>將 <span class="math inline">\(P\)</span>, <span
+class="math inline">\(Q\)</span> 擴充成 <span
+class="math inline">\(E(Q_p)\)</span> 下的點 <span
+class="math inline">\(P&#39;\)</span>, <span
+class="math inline">\(Q&#39;\)</span>，我們要找到 <span
+class="math inline">\(n\)</span> 使得 <span class="math inline">\(O&#39;
+= Q&#39;-nP&#39;\)</span> 不是整數點。</li>
+<li>為了套上 <span class="math inline">\(\phi\)</span>，我們把式子乘上
+<span class="math inline">\(p\)</span> 倍，得到 <span
+class="math inline">\(pO&#39; = pQ&#39; - npP&#39;\)</span>。</li>
+<li>套上 <span class="math inline">\(\phi\)</span> 函數得到，<span
+class="math inline">\(n \equiv \frac{\phi(pQ&#39;)}{\phi(pP&#39;)} \pmod
+p\)</span></li>
 </ul>
-<p>注意到雖然 <span class="math inline">\(E(Q_p)\)</span> 把所有點擴充到 <span class="math inline">\(p\)</span> 的好幾次方，但實際上計算時並沒有用到高次項，可以直接省略。另外我們只在乎 <span class="math inline">\(\phi\)</span> 模 <span class="math inline">\(p^2\)</span> 的餘數，所以直接計算 <span class="math inline">\(\frac{-x}{y}\)</span> 就可以了。總而言之，計算 <span class="math inline">\(\frac{\phi(pQ&#39;)}{\phi(pP&#39;)}\)</span> 只需要 <span class="math inline">\(O(\log p)\)</span> 的時間。</p>
+<p>注意到雖然 <span class="math inline">\(E(Q_p)\)</span> 把所有點擴充到
+<span class="math inline">\(p\)</span>
+的好幾次方，但實際上計算時並沒有用到高次項，可以直接省略。另外我們只在乎
+<span class="math inline">\(\phi\)</span> 模 <span
+class="math inline">\(p^2\)</span> 的餘數，所以直接計算 <span
+class="math inline">\(\frac{-x}{y}\)</span> 就可以了。總而言之，計算
+<span class="math inline">\(\frac{\phi(pQ&#39;)}{\phi(pP&#39;)}\)</span>
+只需要 <span class="math inline">\(O(\log p)\)</span> 的時間。</p>
 <h2 id="special-thanks">Special thanks</h2>
-<p>ariana and their wonderful <a target="_blank" rel="noopener" href="https://ariana1729.github.io/2021/05/31/SmartAttack.html">blog</a>. 還有余紘勳幫我翻譯了許多艱澀的大學數學用詞。</p>
+<p>ariana and their wonderful <a
+target="_blank" rel="noopener" href="https://ariana1729.github.io/2021/05/31/SmartAttack.html">blog</a>.
+還有余紘勳幫我翻譯了許多艱澀的大學數學用詞。</p>
 
             </div>
 
@@ -429,7 +681,7 @@
                     
                 </ul>
                 <p class="copyright footer-author">
-                    &copy; 2021-2023 
+                    &copy; 2021-2024 
                     <a rel="external" class="copyright-link" href="" target="_blank">Utaha</a><br/>
                     Powered by <a rel="external" class="copyright-link" href="https://hexo.io/" target="_blank">Hexo</a>  
                     <span class="copyright-split">&nbsp;|&nbsp;&nbsp;</span>

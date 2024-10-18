@@ -213,26 +213,50 @@
                 <p>A random note for some basic things about elliptic curve.</p>
 <h2 id="intro">Intro</h2>
 <p>橢圓曲線</p>
-<p><span class="math display">\[y^2 + a_1 xy + a_3 y = x^3 + a_2x^2 + a_4x + a_6\]</span></p>
-<p>的二維曲線，這裡我們只考慮 <span class="math inline">\(\mathbb{Z}_p\)</span> 下的橢圓曲線，也就是</p>
-<p><span class="math display">\[y^2 + a_1 xy + a_3 y = x^3 + a_2x^2 + a_4x + a_6 \pmod{p}\]</span></p>
-<p>其中 <span class="math inline">\(p\)</span> 為一質數，在大部分的情況下 (<span class="math inline">\(p \ne 2, 3\)</span>)，橢圓曲線都可以化簡成以下形式：</p>
+<p><span class="math display">\[y^2 + a_1 xy + a_3 y = x^3 + a_2x^2 +
+a_4x + a_6\]</span></p>
+<p>的二維曲線，這裡我們只考慮 <span
+class="math inline">\(\mathbb{Z}_p\)</span> 下的橢圓曲線，也就是</p>
+<p><span class="math display">\[y^2 + a_1 xy + a_3 y = x^3 + a_2x^2 +
+a_4x + a_6 \pmod{p}\]</span></p>
+<p>其中 <span class="math inline">\(p\)</span>
+為一質數，在大部分的情況下 (<span class="math inline">\(p \ne 2,
+3\)</span>)，橢圓曲線都可以化簡成以下形式：</p>
 <p><span class="math display">\[y^2 = x^3 + Ax + B \pmod{p}\]</span></p>
 <p>以下我們都使用簡化後的形式。</p>
 <h2 id="曲線形狀">曲線形狀</h2>
-<p>橢圓曲線有兩個重要的參數：判別式和 <span class="math inline">\(j\)</span>-invariant。前者決定橢圓曲線的形狀，後者決定兩條曲線是否等價。</p>
-<p><span class="math display">\[\Delta = -16(4A^3+27B^2)\]</span> <span class="math display">\[j = \frac{6912A^3}{4A^3 + 27B^2}\]</span></p>
-<p>如果判別式是正的，橢圓曲線會是一個圈圈加一條曲線，負的則會是一條曲線，為零的時候會形成singular curve</p>
+<p>橢圓曲線有兩個重要的參數：判別式和 <span
+class="math inline">\(j\)</span>-invariant。前者決定橢圓曲線的形狀，後者決定兩條曲線是否等價。</p>
+<p><span class="math display">\[\Delta = -16(4A^3+27B^2)\]</span> <span
+class="math display">\[j = \frac{6912A^3}{4A^3 + 27B^2}\]</span></p>
+<p>如果判別式是正的，橢圓曲線會是一個圈圈加一條曲線，負的則會是一條曲線，為零的時候會形成singular
+curve</p>
 <h2 id="singular-curve">Singular Curve</h2>
-<p>Singular Curve 的形式為 <span class="math inline">\(y^2 = x^3 - Ax^2\)</span> (注意到這裡我們保留 <span class="math inline">\(x^2\)</span> 項)，曲線有參數式 <span class="math inline">\((t^2 + A, t(t^2 + A))\)</span>。若曲線上的 <span class="math inline">\(P, Q, R\)</span> 都在一條直線 <span class="math inline">\(y = ax + b\)</span> 上，則這三點的參數 <span class="math inline">\(t_P, t_Q, t_R\)</span> 滿足方程式</p>
-<p><span class="math display">\[t(t^2 + A) = a(t^2 + A) + b\]</span> <span class="math display">\[t^3 - at^2 + At - (aA + b) = 0\]</span></p>
+<p>Singular Curve 的形式為 <span class="math inline">\(y^2 = x^3 -
+Ax^2\)</span> (注意到這裡我們保留 <span
+class="math inline">\(x^2\)</span> 項)，曲線有參數式 <span
+class="math inline">\((t^2 + A, t(t^2 + A))\)</span>。若曲線上的 <span
+class="math inline">\(P, Q, R\)</span> 都在一條直線 <span
+class="math inline">\(y = ax + b\)</span> 上，則這三點的參數 <span
+class="math inline">\(t_P, t_Q, t_R\)</span> 滿足方程式</p>
+<p><span class="math display">\[t(t^2 + A) = a(t^2 + A) + b\]</span>
+<span class="math display">\[t^3 - at^2 + At - (aA + b) = 0\]</span></p>
 <p>由根與係數的關係，我們有</p>
-<p><span class="math display">\[t_Pt_Q + t_Pt_R + t_Qt_R = A\]</span></p>
+<p><span class="math display">\[t_Pt_Q + t_Pt_R + t_Qt_R =
+A\]</span></p>
 <p>然後改寫成</p>
-<p><span class="math display">\[\prod_{cyc} \frac{t_P + \sqrt{A}}{t_P - \sqrt{A}} = 1\]</span></p>
-<p>由於 <span class="math inline">\(t = \frac{y}{x}\)</span>，考慮映射：</p>
-<p><span class="math display">\[(x, y) \mapsto \frac{y-\sqrt{A}x}{y + \sqrt{A}x}\]</span></p>
-<p>我們可以把三點共線轉化成三個數字相乘是 <span class="math inline">\(1\)</span>，也就相當於把橢圓曲線上的 DLP 轉化成一般的 DLP。值得一提的是當 <span class="math inline">\(A\)</span> 是二次剩餘時是 <span class="math inline">\(\mathbb{Z}_{q}\)</span> 的DLP，否則是某種高斯整數的 DLP，order 是 <span class="math inline">\(p + 1\)</span>。</p>
+<p><span class="math display">\[\prod_{cyc} \frac{t_P + \sqrt{A}}{t_P -
+\sqrt{A}} = 1\]</span></p>
+<p>由於 <span class="math inline">\(t =
+\frac{y}{x}\)</span>，考慮映射：</p>
+<p><span class="math display">\[(x, y) \mapsto \frac{y-\sqrt{A}x}{y +
+\sqrt{A}x}\]</span></p>
+<p>我們可以把三點共線轉化成三個數字相乘是 <span
+class="math inline">\(1\)</span>，也就相當於把橢圓曲線上的 DLP
+轉化成一般的 DLP。值得一提的是當 <span class="math inline">\(A\)</span>
+是二次剩餘時是 <span class="math inline">\(\mathbb{Z}_{q}\)</span>
+的DLP，否則是某種高斯整數的 DLP，order 是 <span class="math inline">\(p
++ 1\)</span>。</p>
 
             </div>
 
@@ -349,7 +373,7 @@
                     
                 </ul>
                 <p class="copyright footer-author">
-                    &copy; 2021-2023 
+                    &copy; 2021-2024 
                     <a rel="external" class="copyright-link" href="" target="_blank">Utaha</a><br/>
                     Powered by <a rel="external" class="copyright-link" href="https://hexo.io/" target="_blank">Hexo</a>  
                     <span class="copyright-split">&nbsp;|&nbsp;&nbsp;</span>

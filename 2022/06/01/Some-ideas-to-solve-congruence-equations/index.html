@@ -211,20 +211,99 @@
 </span>  
                 
                 <h2 id="motivation">Motivation</h2>
-<p>Normally, given an equation <span class="math inline">\(f(x) = 0\)</span>, one can find all roots by WolframAlpha or some magical algorithms. However, the congruence version <span class="math inline">\(f(x) \equiv 0 \pmod n\)</span> is a lot harder. In the context of CTF crypto challenges, a common trick is to somehow find another relation <span class="math inline">\(g(x) = 0\)</span> and calculate the gcd of <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> (which has degree 1 most of the time). This can be generalized to multi-variable case: given <span class="math inline">\(n\)</span> variables and <span class="math inline">\(n + 1\)</span> congruence equations with the same modulus, it is possible to solve the equations in time constant to <span class="math inline">\(n\)</span> (assuming each arithmetic operation takes <span class="math inline">\(O(1)\)</span> time).</p>
-<p>In the case of two variables, I found an idea to make things simpler. It might be a well-known trick, and in that case, this article serves as a tutorial :p</p>
+<p>Normally, given an equation <span class="math inline">\(f(x) =
+0\)</span>, one can find all roots by WolframAlpha or some magical
+algorithms. However, the congruence version <span
+class="math inline">\(f(x) \equiv 0 \pmod n\)</span> is a lot harder. In
+the context of CTF crypto challenges, a common trick is to somehow find
+another relation <span class="math inline">\(g(x) = 0\)</span> and
+calculate the gcd of <span class="math inline">\(f\)</span> and <span
+class="math inline">\(g\)</span> (which has degree 1 most of the time).
+This can be generalized to multi-variable case: given <span
+class="math inline">\(n\)</span> variables and <span
+class="math inline">\(n + 1\)</span> congruence equations with the same
+modulus, it is possible to solve the equations in time constant to <span
+class="math inline">\(n\)</span> (assuming each arithmetic operation
+takes <span class="math inline">\(O(1)\)</span> time).</p>
+<p>In the case of two variables, I found an idea to make things simpler.
+It might be a well-known trick, and in that case, this article serves as
+a tutorial :p</p>
 <h2 id="naive-method">Naive method</h2>
-<p>Given <span class="math inline">\(f(x, y) = g(x, y) = h(x, y) = 0\)</span>, we can treat <span class="math inline">\(x\)</span> as a constant and <span class="math inline">\(y\)</span> as the variable. After calculating <span class="math inline">\(\gcd(f, g)\)</span> and <span class="math inline">\(\gcd(g, h)\)</span>, we get two equations of <span class="math inline">\(x\)</span>, which reduces to the one-variable case.</p>
-<p>However, the issue is that the coefficents grow exponentially in the process of gcd calculation. Specifically, consider two equations</p>
-<p><span class="math display">\[A = a_n(x)y^n + a_{n-1}(x)y^{n-1} + \dots + a_1(x)y + a_0(x)\]</span> <span class="math display">\[B = b_n(x)y^n + b_{n-1}(x)y^{n-1} + \dots + b_1(x)y + b_0(x)\]</span></p>
-<p>where all <span class="math inline">\(a_i\)</span> and <span class="math inline">\(b_i\)</span> has bounded degree <span class="math inline">\(d\)</span>. To cancel the <span class="math inline">\(y^n\)</span> term, we calculate <span class="math inline">\(b_n(x)A - a_n(x)B\)</span>, and in the worst case, the coefficeints of the result have degree <span class="math inline">\(2d\)</span>. As there are <span class="math inline">\(n\)</span> iterations, the final result has degree <span class="math inline">\(d2^n\)</span>, which is unacceptable.</p>
+<p>Given <span class="math inline">\(f(x, y) = g(x, y) = h(x, y) =
+0\)</span>, we can treat <span class="math inline">\(x\)</span> as a
+constant and <span class="math inline">\(y\)</span> as the variable.
+After calculating <span class="math inline">\(\gcd(f, g)\)</span> and
+<span class="math inline">\(\gcd(g, h)\)</span>, we get two equations of
+<span class="math inline">\(x\)</span>, which reduces to the
+one-variable case.</p>
+<p>However, the issue is that the coefficents grow exponentially in the
+process of gcd calculation. Specifically, consider two equations</p>
+<p><span class="math display">\[A = a_n(x)y^n + a_{n-1}(x)y^{n-1} +
+\dots + a_1(x)y + a_0(x)\]</span> <span class="math display">\[B =
+b_n(x)y^n + b_{n-1}(x)y^{n-1} + \dots + b_1(x)y + b_0(x)\]</span></p>
+<p>where all <span class="math inline">\(a_i\)</span> and <span
+class="math inline">\(b_i\)</span> has bounded degree <span
+class="math inline">\(d\)</span>. To cancel the <span
+class="math inline">\(y^n\)</span> term, we calculate <span
+class="math inline">\(b_n(x)A - a_n(x)B\)</span>, and in the worst case,
+the coefficeints of the result have degree <span
+class="math inline">\(2d\)</span>. As there are <span
+class="math inline">\(n\)</span> iterations, the final result has degree
+<span class="math inline">\(d2^n\)</span>, which is unacceptable.</p>
 <h2 id="another-approach">Another approach</h2>
-<p>We still want to calculate the gcd, but we need something better than the Euclidean method's exponential-size result.</p>
-<p>Given <span class="math inline">\(f(x, y) = g(x, y) = 0\)</span>, consider the polynomial ring divided by <span class="math inline">\(g(x, y)\)</span>. By division, we set <span class="math inline">\(y\)</span> as the major variables, meaning that if the degree of <span class="math inline">\(g(x, y)\)</span> with respect to <span class="math inline">\(y\)</span> is <span class="math inline">\(d\)</span>, then every <span class="math inline">\(y^d\)</span> (or greater) term must be substituted. The idea is that for <span class="math inline">\(0 \le i &lt; d\)</span>, <span class="math display">\[f(x, y)y^i = f^i_{d-1}(x)y^{d-1} + \dots + f^i_{1}(x)y + f^i_0(x)\]</span> can be seen as a vector of polynomials <span class="math inline">\(v_i = (f^i_0, f^i_1, \dots, f^i_{d-1})\)</span>. These <span class="math inline">\(d\)</span> vectors span a space, and if a vector <span class="math inline">\((t(x), 0, 0, \dots, 0)\)</span> is in the space, then <span class="math inline">\(t(x)\)</span> is the gcd we want. This motivates us to put these <span class="math inline">\(d\)</span> vectors in a <span class="math inline">\(d \times d\)</span> square matrix and perform Guassian elimination, but Guassian elimination has the same issue as Euclidean method – the coefficent growth. Instead, we calculate the determinant of the matrix, which is a multiple of <span class="math inline">\(t(x)\)</span>, by <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bareiss_algorithm">Barieiss algorithm</a> to avoid exponential-size calculation.</p>
-<p>The last detail is the calculation of <span class="math inline">\(f(x, y)y^i\)</span>. Notice that while <span class="math inline">\(f(x, y)\)</span> has bounded degree <span class="math inline">\(d\)</span>, <span class="math inline">\(f(x, y)y\)</span> can have higher degree because when the <span class="math inline">\(y^n\)</span> term exists, we need to perform a division. The good news is that this process has linear degree growth, so <span class="math inline">\(f(x, y)y^i\)</span> has degree at most <span class="math inline">\(id\)</span>, and the determinant will have degree <span class="math inline">\(O(d^2)\)</span>.</p>
+<p>We still want to calculate the gcd, but we need something better than
+the Euclidean method's exponential-size result.</p>
+<p>Given <span class="math inline">\(f(x, y) = g(x, y) = 0\)</span>,
+consider the polynomial ring divided by <span class="math inline">\(g(x,
+y)\)</span>. By division, we set <span class="math inline">\(y\)</span>
+as the major variables, meaning that if the degree of <span
+class="math inline">\(g(x, y)\)</span> with respect to <span
+class="math inline">\(y\)</span> is <span
+class="math inline">\(d\)</span>, then every <span
+class="math inline">\(y^d\)</span> (or greater) term must be
+substituted. The idea is that for <span class="math inline">\(0 \le i
+&lt; d\)</span>, <span class="math display">\[f(x, y)y^i =
+f^i_{d-1}(x)y^{d-1} + \dots + f^i_{1}(x)y + f^i_0(x)\]</span> can be
+seen as a vector of polynomials <span class="math inline">\(v_i =
+(f^i_0, f^i_1, \dots, f^i_{d-1})\)</span>. These <span
+class="math inline">\(d\)</span> vectors span a space, and if a vector
+<span class="math inline">\((t(x), 0, 0, \dots, 0)\)</span> is in the
+space, then <span class="math inline">\(t(x)\)</span> is the gcd we
+want. This motivates us to put these <span
+class="math inline">\(d\)</span> vectors in a <span
+class="math inline">\(d \times d\)</span> square matrix and perform
+Guassian elimination, but Guassian elimination has the same issue as
+Euclidean method – the coefficent growth. Instead, we calculate the
+determinant of the matrix, which is a multiple of <span
+class="math inline">\(t(x)\)</span>, by <a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bareiss_algorithm">Barieiss
+algorithm</a> to avoid exponential-size calculation.</p>
+<p>The last detail is the calculation of <span
+class="math inline">\(f(x, y)y^i\)</span>. Notice that while <span
+class="math inline">\(f(x, y)\)</span> has bounded degree <span
+class="math inline">\(d\)</span>, <span class="math inline">\(f(x,
+y)y\)</span> can have higher degree because when the <span
+class="math inline">\(y^n\)</span> term exists, we need to perform a
+division. The good news is that this process has linear degree growth,
+so <span class="math inline">\(f(x, y)y^i\)</span> has degree at most
+<span class="math inline">\(id\)</span>, and the determinant will have
+degree <span class="math inline">\(O(d^2)\)</span>.</p>
 <h2 id="remark">Remark</h2>
-<p>The above method utilizes a lot of polynomial arithmetic operation. I found <a target="_blank" rel="noopener" href="https://docs.sympy.org/latest/modules/polys/internals.html">sympy galois tools</a> useful, but they probably didn't implement FFT because it is slower than what I thought. Sage might have relevant tools, but most of them require <span class="math inline">\(n\)</span> to be a prime. Ironically, in RSA setting, if they found out that a number does not have a modular inverse modulo <span class="math inline">\(n\)</span>, that would be even better.</p>
-<p>I also didn't think about the complexity of the above method but just make a rough estimation of <span class="math inline">\(O(d^4)\)</span>. FFT can improve the complexity, but the purpose of the article is just to share this idea. Also, it is still a problem to generalize this to <span class="math inline">\(n\)</span> variables as now it only works with constant number of variables.</p>
+<p>The above method utilizes a lot of polynomial arithmetic operation. I
+found <a
+target="_blank" rel="noopener" href="https://docs.sympy.org/latest/modules/polys/internals.html">sympy
+galois tools</a> useful, but they probably didn't implement FFT because
+it is slower than what I thought. Sage might have relevant tools, but
+most of them require <span class="math inline">\(n\)</span> to be a
+prime. Ironically, in RSA setting, if they found out that a number does
+not have a modular inverse modulo <span
+class="math inline">\(n\)</span>, that would be even better.</p>
+<p>I also didn't think about the complexity of the above method but just
+make a rough estimation of <span class="math inline">\(O(d^4)\)</span>.
+FFT can improve the complexity, but the purpose of the article is just
+to share this idea. Also, it is still a problem to generalize this to
+<span class="math inline">\(n\)</span> variables as now it only works
+with constant number of variables.</p>
 
             </div>
 
@@ -330,7 +409,7 @@
                     
                 </ul>
                 <p class="copyright footer-author">
-                    &copy; 2021-2023 
+                    &copy; 2021-2024 
                     <a rel="external" class="copyright-link" href="" target="_blank">Utaha</a><br/>
                     Powered by <a rel="external" class="copyright-link" href="https://hexo.io/" target="_blank">Hexo</a>  
                     <span class="copyright-split">&nbsp;|&nbsp;&nbsp;</span>

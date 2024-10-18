@@ -224,65 +224,97 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">最常用的</td>
-<td style="text-align: center;"><span class="math inline">\(y^2 = x^3 + ax + b\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(y^2 = x^3 +
+ax + b\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Weierstrass</td>
-<td style="text-align: center;"><span class="math inline">\(y^2 + axy + cy = x^3 + bx^2 + dx + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(y^2 + axy +
+cy = x^3 + bx^2 + dx + e\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">projective</td>
-<td style="text-align: center;"><span class="math inline">\(y^2z = x^3 + axz^2 + bz^3\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(y^2z = x^3 +
+axz^2 + bz^3\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Jacobian</td>
-<td style="text-align: center;"><span class="math inline">\(y^2 = x^3 + axz^4 + bz^6\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(y^2 = x^3 +
+axz^4 + bz^6\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Montgomery</td>
-<td style="text-align: center;"><span class="math inline">\(by^2 = x^3 + ax^2 + x\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(by^2 = x^3 +
+ax^2 + x\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Edward</td>
-<td style="text-align: center;"><span class="math inline">\(x^2 + y^2 = c^2(1 + dx^2y^2)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(x^2 + y^2 =
+c^2(1 + dx^2y^2)\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Twisted Edward</td>
-<td style="text-align: center;"><span class="math inline">\(ax^2 + y^2 = 1 + dx^2y^2\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(ax^2 + y^2 =
+1 + dx^2y^2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Huff</td>
-<td style="text-align: center;"><span class="math inline">\(ax(y^2 - 1) = by(x^2 - 1)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(ax(y^2 - 1)
+= by(x^2 - 1)\)</span></td>
 </tr>
 </tbody>
 </table></div>
-<p>我們的目標是把所有其他curve變成「最常用的」或是 Weiestrass，因為這兩種曲線可以直接塞進 sage 裡面跑。另外，Edward 系列也有 projective 版本，但大同小異。</p>
+<p>我們的目標是把所有其他curve變成「最常用的」或是
+Weiestrass，因為這兩種曲線可以直接塞進 sage 裡面跑。另外，Edward
+系列也有 projective 版本，但大同小異。</p>
 <h2 id="projective">Projective</h2>
-<p>對於一個 projective 的點 <span class="math inline">\((x, y, z)\)</span>，他會對應到橢圓曲線的點 <span class="math inline">\((\frac{x}{z}, \frac{y}{z})\)</span>，然後參數不變。</p>
+<p>對於一個 projective 的點 <span class="math inline">\((x, y,
+z)\)</span>，他會對應到橢圓曲線的點 <span
+class="math inline">\((\frac{x}{z},
+\frac{y}{z})\)</span>，然後參數不變。</p>
 <h2 id="jacobian">Jacobian</h2>
-<p>跟 projective 很像，一個點 <span class="math inline">\((x, y, z)\)</span> 會對應到橢圓曲線的 <span class="math inline">\((\frac{x}{z^2}, \frac{y}{z^3})\)</span>，然後參數不變。</p>
+<p>跟 projective 很像，一個點 <span class="math inline">\((x, y,
+z)\)</span> 會對應到橢圓曲線的 <span
+class="math inline">\((\frac{x}{z^2},
+\frac{y}{z^3})\)</span>，然後參數不變。</p>
 <h2 id="montgomery">Montgomery</h2>
 <p>把 Montgomery 的式子除上 <span class="math inline">\(b^3\)</span></p>
-<p><span class="math display">\[\left(\frac{y}{b}\right)^2 = \left(\frac{x}{b}\right)^3 + \frac{a}{b}\left(\frac{x}{b}\right)^2 + \frac{1}{b^2}\left(\frac{x}{b}\right)\]</span></p>
-<p>這樣就變成 Weiestrass form 了，所以 Montgomery 的點 <span class="math inline">\((x, y)\)</span> 會對應到 <span class="math inline">\((\frac{x}{b}, \frac{y}{b})\)</span>。</p>
+<p><span class="math display">\[\left(\frac{y}{b}\right)^2 =
+\left(\frac{x}{b}\right)^3 + \frac{a}{b}\left(\frac{x}{b}\right)^2 +
+\frac{1}{b^2}\left(\frac{x}{b}\right)\]</span></p>
+<p>這樣就變成 Weiestrass form 了，所以 Montgomery 的點 <span
+class="math inline">\((x, y)\)</span> 會對應到 <span
+class="math inline">\((\frac{x}{b}, \frac{y}{b})\)</span>。</p>
 <h2 id="edward">Edward</h2>
-<p>這是 Twisted Edward curve 的一個特例，我們可以把原式除上 <span class="math inline">\(c^2\)</span> 然後改寫成</p>
-<p><span class="math display">\[\left(\frac{x}{c}\right)^2 + \left(\frac{y}{c}\right)^2 = 1 + dc^4\left(\frac{x}{c}\right)^2\left(\frac{y}{c}\right)^2\]</span></p>
-<p>這是 Twisted Edward 中 <span class="math inline">\(a = 1\)</span> 的特例。</p>
+<p>這是 Twisted Edward curve 的一個特例，我們可以把原式除上 <span
+class="math inline">\(c^2\)</span> 然後改寫成</p>
+<p><span class="math display">\[\left(\frac{x}{c}\right)^2 +
+\left(\frac{y}{c}\right)^2 = 1 +
+dc^4\left(\frac{x}{c}\right)^2\left(\frac{y}{c}\right)^2\]</span></p>
+<p>這是 Twisted Edward 中 <span class="math inline">\(a = 1\)</span>
+的特例。</p>
 <h2 id="twisted-edward">Twisted Edward</h2>
 <p>我們可以它轉換成 Weiestrass curve:</p>
-<p><span class="math display">\[y^2 = x^3 + 2(a + d)x^2 + (a - d)^2x\]</span></p>
-<p>且一個點 <span class="math inline">\((x, y)\)</span> 會被轉換成 <span class="math inline">\(((a - d)\frac{1 + y}{1 - y}, (a - d)\frac{2(1 + y)}{x(1 - y)})\)</span>。<del>有興趣的人可以推推看</del></p>
+<p><span class="math display">\[y^2 = x^3 + 2(a + d)x^2 + (a -
+d)^2x\]</span></p>
+<p>且一個點 <span class="math inline">\((x, y)\)</span> 會被轉換成 <span
+class="math inline">\(((a - d)\frac{1 + y}{1 - y}, (a - d)\frac{2(1 +
+y)}{x(1 - y)})\)</span>。<del>有興趣的人可以推推看</del></p>
 <p><a target="_blank" rel="noopener" href="https://eprint.iacr.org/2011/430.pdf">參考資料</a></p>
 <h2 id="huff">Huff</h2>
 <p>我們可以它轉換成 Weiestrass curve:</p>
-<p><span class="math display">\[y^2 = x^3 + (a + b)x^2 + abx\]</span></p>
-<p>且一個點 <span class="math inline">\((x, y)\)</span> 會被轉換成 <span class="math inline">\((\frac{bx - ay}{y - x}, \frac{b - a}{y - x})\)</span>。<del>有興趣的人可以推推看</del></p>
-<p><a target="_blank" rel="noopener" href="https://eprint.iacr.org/2011/430.pdf">參考資料</a>同 Twisted Edward</p>
+<p><span class="math display">\[y^2 = x^3 + (a + b)x^2 +
+abx\]</span></p>
+<p>且一個點 <span class="math inline">\((x, y)\)</span> 會被轉換成 <span
+class="math inline">\((\frac{bx - ay}{y - x}, \frac{b - a}{y -
+x})\)</span>。<del>有興趣的人可以推推看</del></p>
+<p><a target="_blank" rel="noopener" href="https://eprint.iacr.org/2011/430.pdf">參考資料</a>同 Twisted
+Edward</p>
 <h2 id="script">Script</h2>
 <p>有機會的話或許可以寫個 python 任意轉換這些東西。</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>雖然還是有題目連 curve 都不給，要用加法公式自己判斷，但有了這個表再去查也方便許多，祝大家再也不會看到完全不知道在幹嘛的曲線！</p>
+<p>雖然還是有題目連 curve
+都不給，要用加法公式自己判斷，但有了這個表再去查也方便許多，祝大家再也不會看到完全不知道在幹嘛的曲線！</p>
 
             </div>
 
@@ -399,7 +431,7 @@
                     
                 </ul>
                 <p class="copyright footer-author">
-                    &copy; 2021-2023 
+                    &copy; 2021-2024 
                     <a rel="external" class="copyright-link" href="" target="_blank">Utaha</a><br/>
                     Powered by <a rel="external" class="copyright-link" href="https://hexo.io/" target="_blank">Hexo</a>  
                     <span class="copyright-split">&nbsp;|&nbsp;&nbsp;</span>

@@ -211,18 +211,43 @@
 </span>  
                 
                 <h2 id="intro">Intro</h2>
-<p>自從在 SEETF Shard 和 b6aCTF babyRSA 死亡之後我開始發現自己其實很不擅長 small_roots 相關的技巧。而最近的 WACON qual 又出現了一個需要小爆搜 + 優化的題目，所以我打算把稍微整理過的資料丟著。</p>
+<p>自從在 SEETF Shard 和 b6aCTF babyRSA
+死亡之後我開始發現自己其實很不擅長 small_roots 相關的技巧。而最近的
+WACON qual 又出現了一個需要小爆搜 +
+優化的題目，所以我打算把稍微整理過的資料丟著。</p>
 <h2 id="challenge">Challenge</h2>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> bytes_to_long, getStrongPrime</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;flag.txt&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    m = bytes_to_long(f.read())</span><br><span class="line"></span><br><span class="line">SIZE = <span class="number">1024</span></span><br><span class="line">p = getStrongPrime(SIZE)</span><br><span class="line">q = getStrongPrime(SIZE)</span><br><span class="line">n = p * q</span><br><span class="line">e = <span class="number">0x10001</span></span><br><span class="line">c = <span class="built_in">pow</span>(m, e, n)</span><br><span class="line"></span><br><span class="line">p_msb = p - p % (<span class="number">2</span> ** (SIZE // <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;n = &#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;c = &#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;p_msb = &#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="solution">Solution</h2>
-<p>第一步可以從 maple 偷 flatter 優化版的 <a target="_blank" rel="noopener" href="https://blog.maple3142.net/2023/06/12/seetf-2023-writeups/#shard">small_roots</a>，我雖然沒有實際比較過差多少，但真的差很多。</p>
-<p>接下來不論要爆搜多少，都需要面臨決定參數的問題。過去的我非常糾結參數的正確性，看到隊友搞了 <span class="math inline">\(\beta=0.38\)</span> 之後快中風了，但實際上能找到roots的都是好參數。後來學習了 <a target="_blank" rel="noopener" href="https://connor-mccartney.github.io/cryptography/small-roots/push-it-to-the-limit-WACON-2023-prequal">ConnorM's blog</a> 之後覺得很有道理 – 不論怎麼調 <span class="math inline">\(\beta, \epsilon\)</span>，最後有影響的都是決定矩陣大小的 <span class="math inline">\(m, t\)</span>，既然沒有要追求理論值乾脆直接調 <span class="math inline">\(m\)</span> 就行了。於是我照著跑 ConnorM的script，我家MBP 2017得到了差不多的數字：</p>
+<p>第一步可以從 maple 偷 flatter 優化版的 <a
+target="_blank" rel="noopener" href="https://blog.maple3142.net/2023/06/12/seetf-2023-writeups/#shard">small_roots</a>，我雖然沒有實際比較過差多少，但真的差很多。</p>
+<p>接下來不論要爆搜多少，都需要面臨決定參數的問題。過去的我非常糾結參數的正確性，看到隊友搞了
+<span class="math inline">\(\beta=0.38\)</span>
+之後快中風了，但實際上能找到roots的都是好參數。後來學習了 <a
+target="_blank" rel="noopener" href="https://connor-mccartney.github.io/cryptography/small-roots/push-it-to-the-limit-WACON-2023-prequal">ConnorM's
+blog</a> 之後覺得很有道理 – 不論怎麼調 <span
+class="math inline">\(\beta,
+\epsilon\)</span>，最後有影響的都是決定矩陣大小的 <span
+class="math inline">\(m, t\)</span>，既然沒有要追求理論值乾脆直接調
+<span class="math inline">\(m\)</span> 就行了。於是我照著跑
+ConnorM的script，我家MBP 2017得到了差不多的數字：</p>
 <p><div class="img-item" data-src="https://imgur.com/uBIkZUG" data-sub-html=".caption"><img src="https://imgur.com/uBIkZUG" /></div></p>
 <p>事情似乎到這裡就結束了，加速small_roots，找到好參數，還有什麼可以做的？然而...</p>
 <h2 id="final-optimization">Final optimization</h2>
-<p>比起真的爆搜 bits ，其實質數還是有點結構可以拿來利用。最常見的操作是利用質數是奇數把 <span class="math inline">\(f = p_msb + x\)</span> 改成 <span class="math inline">\(f = p_msb + 2 * x + 1\)</span> ，減少1 bit的負擔。同樣的道理，我們能說 <span class="math inline">\(p\)</span> 不是 <span class="math inline">\(3\)</span> 的倍數，但因為有兩種可能所以不是很能列成式子，只能各自跑。然而這件事提醒了我，比起爆搜bit不如去爆搜 <span class="math inline">\(p%c\)</span> ，其中<span class="math inline">\(c\)</span> 是小質數的積。實際測試之後的結果是：</p>
+<p>比起真的爆搜 bits
+，其實質數還是有點結構可以拿來利用。最常見的操作是利用質數是奇數把 <span
+class="math inline">\(f = p_msb + x\)</span> 改成 <span
+class="math inline">\(f = p_msb + 2 * x + 1\)</span> ，減少1
+bit的負擔。同樣的道理，我們能說 <span class="math inline">\(p\)</span>
+不是 <span class="math inline">\(3\)</span>
+的倍數，但因為有兩種可能所以不是很能列成式子，只能各自跑。然而這件事提醒了我，比起爆搜bit不如去爆搜
+<span class="math inline">\(p%c\)</span> ，其中<span
+class="math inline">\(c\)</span>
+是小質數的積。實際測試之後的結果是：</p>
 <p><div class="img-item" data-src="https://imgur.com/oozZ0ke" data-sub-html=".caption"><img src="https://imgur.com/oozZ0ke" /></div></p>
-<p><span class="math inline">\(c = 210\)</span> 的狀況下只有48種餘數需要處理，也就相當於大概四到五倍的加速，實際用的多項式是<code>f = constant + 210 * x + i</code>，其中 <code>constant</code> 刻意改成 210 的倍數會讓世界美好許多。其他細節留給讀者做練習。</p>
+<p><span class="math inline">\(c = 210\)</span>
+的狀況下只有48種餘數需要處理，也就相當於大概四到五倍的加速，實際用的多項式是<code>f = constant + 210 * x + i</code>，其中
+<code>constant</code> 刻意改成 210
+的倍數會讓世界美好許多。其他細節留給讀者做練習。</p>
 
             </div>
 
@@ -231,6 +256,8 @@
             
     <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
         <ul class="pagination d-block text-center">
+            
+                <li class="previous page-item d-inline"><a href="/ctf-note/2024/10/18/AlpacaHack-Round-5-Broadcasting-NTRU/" class="page-link float-left">&larr;  Newer Posts</a></li>
             
             
                 <li class="next page-item d-inline"><a href="/ctf-note/2022/06/01/Some-ideas-to-solve-congruence-equations/" class="page-link float-right">Older Posts  &rarr;</a></li>
@@ -326,7 +353,7 @@
                     
                 </ul>
                 <p class="copyright footer-author">
-                    &copy; 2021-2023 
+                    &copy; 2021-2024 
                     <a rel="external" class="copyright-link" href="" target="_blank">Utaha</a><br/>
                     Powered by <a rel="external" class="copyright-link" href="https://hexo.io/" target="_blank">Hexo</a>  
                     <span class="copyright-split">&nbsp;|&nbsp;&nbsp;</span>

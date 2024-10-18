@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<!--Description-->
+
+
+
+    <meta name="description" content="MIT &#39;23, Computer Sceince"/>
+
+
+<!--Author-->
+
+    <meta name="author" content="Utaha"/>
+
+
+<!--Open Graph Title-->
+
+    <meta property="og:title" content="AlpacaHack Round 5 Broadcasting NTRU"/>
+
+
+<!--Open Graph Description-->
+
+    <meta property="og:description" content="MIT &#39;23, Computer Sceince"/>
+
+
+<!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Utaha&#39;s CTF Note"/>
+
+<!--Type page-->
+
+    <meta property="og:type" content="article"/>
+
+
+<!--Page Cover-->
+
+
+    <meta property="og:image" content="https://utaha1228.github.io/ctf-note/img/home-bg.jpg"/>
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+
+
+
+
+    <meta name="twitter:image" content="https://utaha1228.github.io/ctf-note/img/home-bg.jpg"/>
+
+
+<!-- Title -->
+
+<title>AlpacaHack Round 5 Broadcasting NTRU | Utaha&#39;s CTF Note</title>
+
+<!-- Bootstrap Core CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+
+<!-- Custom CSS -->
+
+<link rel="stylesheet" href="/ctf-note/css/main.css">
+
+
+<!-- Custom Fonts -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.0/css/all.min.css" />
+<link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.0/css/all.min.css" />
+<link href="//fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css"/>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<!-- Gallery -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/featherlight@1.4.0/src/featherlight.css" integrity="sha256-30DV/STftlyQ6v8yaOWlabammvCYtRJERLj/m0b3zno=" crossorigin="anonymous">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/lightgallery@1.6.11/dist/css/lightgallery.min.css">
+
+<!-- favicon -->
+
+<link rel="icon" href="/ctf-note/img/favicon.png"/>
+
+
+
+    <!-- Google Analytics -->
+    
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+<!-- Head tag -->
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top bg-transparent position-absolute w-100 p-0" id="nav">
+    <div class="container pl-0 pr-0">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <a class="navbar-brand text-white p-1 pl-3" href="/ctf-note/">Utaha's CTF Note</a>
+        </div>
+        <div>
+            <!--  -->
+            
+                <li class="list-inline-item">
+                    <!-- 
+                     -->
+                    <a class = "navbar-list text-white p-1 pl-3" style = "text-decoration: none;" href="/ctf-note/">
+                        
+                            Home
+                        
+                    </a>
+                </li>
+            
+                <li class="list-inline-item">
+                    <!-- 
+                        <span class="copyright-split">&nbsp;|&nbsp;</span>
+                    
+                     -->
+                    <a class = "navbar-list text-white p-1 pl-3" style = "text-decoration: none;" href="/ctf-note/archives">
+                        
+                            Archives
+                        
+                    </a>
+                </li>
+            
+                <li class="list-inline-item">
+                    <!-- 
+                        <span class="copyright-split">&nbsp;|&nbsp;</span>
+                    
+                     -->
+                    <a class = "navbar-list text-white p-1 pl-3" style = "text-decoration: none;" href="/ctf-note/tags/writeup">
+                        
+                            Tags
+                        
+                    </a>
+                </li>
+            
+                <li class="list-inline-item">
+                    <!-- 
+                        <span class="copyright-split">&nbsp;|&nbsp;</span>
+                    
+                     -->
+                    <a class = "navbar-list text-white p-1 pl-3" style = "text-decoration: none;" href="/ctf-note/about">
+                        
+                            About
+                        
+                    </a>
+                </li>
+            
+        </div>
+        <div class="navbar-nav float-right">
+            <button class="btn btn-link search-btn navbar-item" data-toggle="modal" data-target="#searchModal">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/ctf-note/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 text-center">
+                <div class="post-heading text-white">
+                    <h1>AlpacaHack Round 5 Broadcasting NTRU</h1>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Main Content -->
+            <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+                
+                    <span class="meta d-inline-block">
+    
+    
+    <!-- Date -->
+    
+        <span class="post-meta-split">&nbsp;|&nbsp;</span>
+        <i class="far fa-calendar-check fa-fw"></i>
+        2024-10-18
+    
+    <!-- word count and read count -->
+    
+
+    
+
+    
+        <span class="post-meta-split">&nbsp;|&nbsp;</span>
+        <i class="far fa-eye fa-fw"></i>
+        <span id="busuanzi_value_page_pv"></span>
+    
+</span>  
+                
+                <h2 id="challenge">Challenge</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"></span><br><span class="line">FLAG = os.environ.get(<span class="string">&quot;FLAG&quot;</span>, <span class="string">&quot;fakeflag&quot;</span>)</span><br><span class="line"></span><br><span class="line">N = <span class="number">509</span></span><br><span class="line">q = <span class="number">2048</span></span><br><span class="line">p = <span class="number">3</span></span><br><span class="line">d = <span class="number">253</span></span><br><span class="line"></span><br><span class="line">Zx.&lt;x&gt; = ZZ[]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">invertmodprime</span>(<span class="params">f, p</span>):</span></span><br><span class="line">    T = Zx.change_ring(Integers(p)).quotient(x ^ N - <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> Zx(lift(<span class="number">1</span> / T(f)))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">invertmodpowerof2</span>(<span class="params">f, q</span>):</span></span><br><span class="line">    <span class="keyword">assert</span> q.is_power_of(<span class="number">2</span>)</span><br><span class="line">    h = invertmodprime(f, <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        r = balancedmod(convolution(h, f), q)</span><br><span class="line">        <span class="keyword">if</span> r == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> h</span><br><span class="line">        h = balancedmod(convolution(h, <span class="number">2</span> - r), q)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">balancedmod</span>(<span class="params">f, q</span>):</span></span><br><span class="line">    g = <span class="built_in">list</span>(((f[i] + q // <span class="number">2</span>) % q) - q // <span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N))</span><br><span class="line">    <span class="keyword">return</span> Zx(g)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convolution</span>(<span class="params">f, g</span>):</span></span><br><span class="line">    <span class="keyword">return</span> (f * g) % (x ^ N - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_polynomial</span>(<span class="params">d</span>):</span></span><br><span class="line">    coeffs = [<span class="number">1</span>] * d + [<span class="number">0</span>] * (N - d)</span><br><span class="line">    shuffle(coeffs)</span><br><span class="line">    <span class="keyword">return</span> Zx(coeffs)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_keys</span>():</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            f = generate_polynomial(d)</span><br><span class="line">            g = generate_polynomial(d)</span><br><span class="line">            f_p = invertmodprime(f, p)</span><br><span class="line">            f_q = invertmodpowerof2(f, q)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    public_key = balancedmod(p * convolution(f_q, g), q)</span><br><span class="line">    secret_key = f, f_p</span><br><span class="line">    <span class="keyword">return</span> public_key, secret_key</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_message</span>():</span></span><br><span class="line">    result = <span class="built_in">list</span>(randrange(<span class="number">2</span>) <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(N))</span><br><span class="line">    <span class="keyword">return</span> Zx(result)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span>(<span class="params">message, public_key</span>):</span></span><br><span class="line">    r = Zx(<span class="built_in">list</span>(randrange(<span class="number">2</span>) <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(N)))</span><br><span class="line">    <span class="keyword">return</span> balancedmod(convolution(public_key, r) + message, q)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">msg = generate_message()</span><br><span class="line"></span><br><span class="line">public_keys = []</span><br><span class="line">ciphertexts = []</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">777</span>):</span><br><span class="line">    public_key, secret_key = generate_keys()</span><br><span class="line">    ct = encrypt(msg, public_key)</span><br><span class="line">    public_keys.append(public_key)</span><br><span class="line">    ciphertexts.append(ct)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;public keys:&quot;</span>, public_keys)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;ciphertexts:&quot;</span>, ciphertexts)</span><br><span class="line"></span><br><span class="line">key = sha256(<span class="built_in">str</span>(msg).encode()).digest()[:<span class="number">16</span>]</span><br><span class="line">cipher = AES.new(key=key, mode=AES.MODE_CTR)</span><br><span class="line">enc_flag = cipher.encrypt(FLAG.encode())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encrypted flag:&quot;</span>, (cipher.nonce + enc_flag).<span class="built_in">hex</span>())</span><br></pre></td></tr></table></figure>
+<p>The author also provides a link to the <a
+target="_blank" rel="noopener" href="https://eprint.iacr.org/2011/590">paper</a> that describes a
+broadcasting attack on NTRU.</p>
+<h2 id="quick-recap-on-the-paper">Quick recap on the paper</h2>
+<p>The encryption of NTRU is</p>
+<p><span class="math display">\[\mathbf{c} = \mathbf{H}\mathbf{r} +
+\mathbf{m} \pmod{q}\]</span></p>
+<p>where <span class="math inline">\(H\)</span> is the public key (in
+the form of a ciruclar matrix) and <span
+class="math inline">\(r\)</span> is the nonce. Define <span
+class="math inline">\(\mathbf{\hat{H}} = \mathbf{H}^{-1}\)</span> and
+<span class="math inline">\(\mathbf{b} =
+\mathbf{H}^{-1}\mathbf{c}\)</span>. If <span
+class="math inline">\(\mathbf{r}^T\mathbf{r}\)</span> is known, we
+have</p>
+<p><span class="math display">\[\mathbf{r}^T\mathbf{r} = (\mathbf{b} -
+\mathbf{\hat{H}}m)^T(\mathbf{b} - \mathbf{\hat{H}}m) =
+\mathbf{b}^T\mathbf{b} - 2b\mathbf{b}^T\mathbf{\hat{H}}\mathbf{m} +
+\mathbf{m}^T\mathbf{\hat{H}}^T\mathbf{\hat{H}}\mathbf{m}\]</span></p>
+<p>This is a quadratic equation with variable <span
+class="math inline">\(\mathbf{m}\)</span>. If we use our usual
+linearization techinique, we will end up with a quadratic number of
+variables. However, notice that <span
+class="math inline">\(\mathbf{\hat{H}}^T\mathbf{\hat{H}}\)</span> is a
+symmetric circular matrix, so many quadratic terms share the same
+coefficient and can be merged. This reduces the number of variables to
+<span class="math inline">\(N + \lceil N/2 \rceil\)</span>, and we need
+this amount of public key and ciphertext pair to recover the secret
+message.</p>
+<h2 id="from-the-paper-to-our-challenge">From the paper to our
+challenge</h2>
+<p>In our challenge, <span class="math inline">\(\mathbf{r}\)</span> and
+<span class="math inline">\(\mathbf{m}\)</span> are random polynomials
+with binary coefficients (all coefficients are 0 or 1) , which means
+<span class="math inline">\(\mathbf{r}^T\mathbf{r}\)</span>. The paper
+provides a trick to consider <span class="math inline">\(\mathbf{r&#39;}
+= 2\mathbf{r} - (1, 1, \cdots, 1)\)</span> instead – all the entries of
+<span class="math inline">\(\mathbf{r&#39;}\)</span> will be either -1
+or 1, and <span
+class="math inline">\(\mathbf{r&#39;}^T\mathbf{r&#39;}\)</span> would be
+<span class="math inline">\(N\)</span>. This is the official solution as
+well, but here we provide another trick that can potentially give a
+faster solution.</p>
+<p>The key insight is that <span class="math inline">\(r(1)\)</span> in
+polynomial form is the same as <span class="math inline">\(r^Tr\)</span>
+in vector form because it's a binary polynomial, and we have the
+equation</p>
+<p><span class="math display">\[c(1) = H(1)r(1) + m(1)
+\pmod{q}\]</span></p>
+<p>Since <span class="math inline">\(H\)</span> is generated by
+calculating <span class="math inline">\(pf/g\)</span> where <span
+class="math inline">\(p=3\)</span>, and <span class="math inline">\(f(1)
+= g(1) = 273\)</span>, we have</p>
+<p><span class="math display">\[c(1) = 3 \cdot r(1) + m(1)\]</span></p>
+<p>if we scale <span class="math inline">\(c(1)\)</span> to be in the
+range <span class="math inline">\([0, q)\)</span> (we use the fact that
+LHS is bounded by <span class="math inline">\(4N &lt; q\)</span>). This
+means if we know the value of <span class="math inline">\(m(1)\)</span>,
+we have <span class="math inline">\(r(1)\)</span> and can perform the
+paper's attack!</p>
+<h3 id="bruteforce-m1">Bruteforce <span
+class="math inline">\(m(1)\)</span></h3>
+<p>The value of <span class="math inline">\(m(1)\)</span> can be viewed
+as the number of heads when flipping <span class="math inline">\(N =
+509\)</span> fair coins. The mean value is <span
+class="math inline">\(N/2\)</span> and the standard variation is <span
+class="math inline">\(\sqrt{N/4} \approx 11.28\)</span>. We also know
+<span class="math inline">\(m(1) \mod 3\)</span>, which turned out to be
+<span class="math inline">\(2\)</span>. Therefore, if we consider <span
+class="math inline">\(m(1) = 221, 224, \cdots, 287\)</span> (a total of
+23 cases), we are highly confident that we can find the correct <span
+class="math inline">\(m(1)\)</span> as it covers up to 3 standard
+deviations.</p>
+<h3 id="linearization">Linearization</h3>
+<p>If we check the equation (3.7) in the paper</p>
+<p><span class="math display">\[a_0x_0 + 2a_1x_1 + \cdots + 2a_{\lfloor
+N/2 \rfloor}x_{\lfloor N/2 \rfloor} -2w_0m_0 - 2w_1m_1 - \cdots -
+2w_{N-1}m_{N-1} = \mathbf{r}^T\mathbf{r} - \mathbf{b}^T\mathbf{b}
+\pmod{q}, \]</span></p>
+<p>the term <span class="math inline">\(a_0x_0\)</span> is the only one
+without an even coefficient. <span class="math inline">\(a_0\)</span> is
+a known value, and <span class="math inline">\(x_0\)</span>,
+coincidently, is the value <span class="math inline">\(m(1)\)</span>
+(again, using the fact that <span
+class="math inline">\(\mathbf{m}^T\mathbf{m} = m(1)\)</span> because
+it's binary)! Therefore, we can rewrite the equation as</p>
+<p><span class="math display">\[a_1x_1 + \cdots + a_{\lfloor N/2
+\rfloor}x_{\lfloor N/2 \rfloor} -w_0m_0 - w_1m_1 - \cdots -
+w_{N-1}m_{N-1} = \frac{1}{2}(\mathbf{r}^T\mathbf{r} -
+\mathbf{b}^T\mathbf{b} - a_0m(1)) \pmod{q/2}, \]</span></p>
+<p>The benefit is that now we can solve the equation as a boolean linear
+system, which is a lot easier and faster than solving the system modulo
+<span class="math inline">\(q = 2048\)</span>.</p>
+<h3 id="final-optimization">Final optimization</h3>
+<p>It seems like the main advantage of this alternative solution is to
+solve the linear system in boolean instead of <span
+class="math inline">\(GF(q)\)</span>, but with the cost of bruteforcing
+23 cases of <span class="math inline">\(m(1)\)</span> and a small chance
+of failing. However, the matrix for the linear system is fixed for all
+cases, which means we only have to calculate the matrix inversion once,
+rather than 23 times. The only repeating operation would be the
+multiplication of a matrix (the inverted one) and a vector, which is not
+the bottleneck of the solution.</p>
+<p>Furthermore, the constant terms of the linear system are the parities
+of</p>
+<p><span class="math display">\[\frac{1}{2}(\mathbf{r}^T\mathbf{r} -
+\mathbf{b}^T\mathbf{b} - a_0m(1))\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{r}^T\mathbf{r} = r(1) =
+(c(1) - m(1)) / 3\)</span>,</p>
+<p><span class="math display">\[\frac{1}{2}(\mathbf{r}^T\mathbf{r} -
+\mathbf{b}^T\mathbf{b} - a_0m(1)) \equiv \frac{1-a_0}{2}\cdot m(1) -
+\frac{1}{2} (\mathbf{b}^T\mathbf{b} + c(1)) \pmod{2}\]</span></p>
+<p>This means that we only have to consider two cases: <span
+class="math inline">\(m(1)\)</span> is odd, or <span
+class="math inline">\(m(1)\)</span> is even. No more 23x overhead.</p>
+<h2 id="solve-script">Solve script</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Modified from official writeup: https://chocorusk.hatenablog.com/entry/2024/10/12/180717</span></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"></span><br><span class="line">N = <span class="number">509</span></span><br><span class="line">q = <span class="number">2048</span></span><br><span class="line">p = <span class="number">3</span></span><br><span class="line">d = <span class="number">253</span></span><br><span class="line"></span><br><span class="line">Zx.&lt;x&gt; = ZZ[]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">invertmodprime</span>(<span class="params">f,p</span>):</span></span><br><span class="line">    T = Zx.change_ring(Integers(p)).quotient(x^N-<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> Zx(lift(<span class="number">1</span> / T(f)))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">invertmodpowerof2</span>(<span class="params">f,q</span>):</span></span><br><span class="line">    <span class="keyword">assert</span> q.is_power_of(<span class="number">2</span>)</span><br><span class="line">    h = invertmodprime(f,<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        r = balancedmod(convolution(h,f),q)</span><br><span class="line">        <span class="keyword">if</span> r == <span class="number">1</span>: <span class="keyword">return</span> h</span><br><span class="line">        h = balancedmod(convolution(h,<span class="number">2</span> - r),q)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">balancedmod</span>(<span class="params">f,q</span>):</span></span><br><span class="line">    g = <span class="built_in">list</span>(((f[i] + q//<span class="number">2</span>) % q) - q//<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N))</span><br><span class="line">    <span class="keyword">return</span> Zx(g)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convolution</span>(<span class="params">f,g</span>):</span></span><br><span class="line">    <span class="keyword">return</span> (f * g) % (x^N-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;output.txt&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    public_keys = sage_eval(f.readline()[<span class="built_in">len</span>(<span class="string">&quot;public keys: &quot;</span>):].strip(), <span class="built_in">locals</span>=&#123;<span class="string">&#x27;x&#x27;</span>:x&#125;)</span><br><span class="line">    ciphertexts = sage_eval(f.readline()[<span class="built_in">len</span>(<span class="string">&quot;ciphertexts: &quot;</span>):].strip(), <span class="built_in">locals</span>=&#123;<span class="string">&#x27;x&#x27;</span>:x&#125;)</span><br><span class="line">    enc_flag = <span class="built_in">bytes</span>.fromhex(f.readline()[<span class="built_in">len</span>(<span class="string">&quot;encrypted flag: &quot;</span>):].strip())</span><br><span class="line"></span><br><span class="line">mat = []</span><br><span class="line"></span><br><span class="line">a0s = []</span><br><span class="line">c_lens = []</span><br><span class="line">b_lens = []</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Constructing matrix&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> h, c <span class="keyword">in</span> <span class="built_in">zip</span>(public_keys, ciphertexts):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        h1 = invertmodpowerof2(h, q)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    b = balancedmod(convolution(h1,c), q)</span><br><span class="line"></span><br><span class="line">    ht = <span class="built_in">list</span>(h1)</span><br><span class="line">    ht += [<span class="number">0</span>]*(N-<span class="built_in">len</span>(ht))</span><br><span class="line">    ht = ht[::-<span class="number">1</span>]</span><br><span class="line">    ht = Zx([ht[-<span class="number">1</span>]]+ht[:-<span class="number">1</span>])</span><br><span class="line">    a = balancedmod(convolution(ht,h1), q)</span><br><span class="line">    w = balancedmod(convolution(ht,b), q)</span><br><span class="line"></span><br><span class="line">    a = <span class="built_in">list</span>(a)</span><br><span class="line">    w = <span class="built_in">list</span>(w)</span><br><span class="line">    a += [<span class="number">0</span>]*(N-<span class="built_in">len</span>(a))</span><br><span class="line">    w += [<span class="number">0</span>]*(N-<span class="built_in">len</span>(w))</span><br><span class="line"></span><br><span class="line">    a0s.append(a[<span class="number">0</span>])</span><br><span class="line">    c_lens.append(<span class="built_in">int</span>(c(<span class="number">1</span>) % q))</span><br><span class="line">    b_lens.append(<span class="built_in">sum</span>(v * v <span class="keyword">for</span> v <span class="keyword">in</span> b))</span><br><span class="line">    mat.append([a[i] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,N//<span class="number">2</span>+<span class="number">1</span>)]+[-w[i] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N)])</span><br><span class="line"></span><br><span class="line">mat = matrix(GF(<span class="number">2</span>), mat)</span><br><span class="line"></span><br><span class="line">msg_len_mod_3 = <span class="built_in">int</span>(ciphertexts[<span class="number">0</span>](<span class="number">1</span>) % q) % <span class="number">3</span></span><br><span class="line"></span><br><span class="line">possible_msg_len = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(msg_len_mod_3, N, <span class="number">3</span>)]</span><br><span class="line">possible_msg_len = <span class="built_in">sorted</span>(possible_msg_len, key=<span class="keyword">lambda</span> x: <span class="built_in">abs</span>(x-N/<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> msg_len <span class="keyword">in</span> possible_msg_len:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Trying message length = <span class="subst">&#123;msg_len&#125;</span>&quot;</span>)</span><br><span class="line">    vec = []</span><br><span class="line">    <span class="keyword">for</span> a0, c_len, b_len <span class="keyword">in</span> <span class="built_in">zip</span>(a0s, c_lens, b_lens):</span><br><span class="line">        r_len = (c_len - msg_len) // <span class="number">3</span></span><br><span class="line">        constant_term = r_len - b_len - a0 * msg_len</span><br><span class="line">        constant_term //= <span class="number">2</span></span><br><span class="line">        vec.append(constant_term)</span><br><span class="line"></span><br><span class="line">    vec = vector(GF(<span class="number">2</span>), vec)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        res = mat.solve_right(vec)</span><br><span class="line">        <span class="keyword">assert</span> mat * res == vec</span><br><span class="line">        res = balancedmod([<span class="built_in">int</span>(v) <span class="keyword">for</span> v <span class="keyword">in</span> <span class="built_in">list</span>(res)[-N:]], <span class="number">4</span>)</span><br><span class="line">        key = sha256(<span class="built_in">str</span>(res).encode()).digest()[:<span class="number">16</span>]</span><br><span class="line">        cipher = AES.new(key=key, mode=AES.MODE_CTR, nonce=enc_flag[:<span class="number">8</span>])</span><br><span class="line">        flag = cipher.decrypt(enc_flag[<span class="number">8</span>:])</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">all</span>(x &lt; <span class="number">128</span> <span class="keyword">for</span> x <span class="keyword">in</span> flag):</span><br><span class="line">            <span class="built_in">print</span>(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+            </div>
+
+            <!-- Post information -->
+            
+            
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+        <ul class="pagination d-block text-center">
+            
+            
+                <li class="next page-item d-inline"><a href="/ctf-note/2023/09/06/Factoring-with-MSB-of-p/" class="page-link float-right">Older Posts  &rarr;</a></li>
+            
+        </ul>
+    </div>
+
+
+            
+                <!-- Comments -->
+                
+
+                
+
+            
+
+        </div>
+    </div>
+</article> 
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+    <style>
+        #toc-content .toc-link::before {
+            background-color: transparent;
+            max-height: 25px;
+        }
+
+        #toc-content .toc-link.is-active-link::before {
+            background-color: #404040;
+        }
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    <div class="ui-toc dropup scrollspy-body pull-right" style="right: 3%;">
+        <button type="button" class="toc-btn btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+            <i class="fas fa-list"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right p-2"  aria-labelledby="tocLabel">
+            <div class="toc-widget">
+                <div id="toc-content" class="text-truncate">
+                </div>
+            </div>
+            <div class="toc-menu pt-3 pl-4">
+                <a class="expand-toggle d-block py-1" href="#"><span class="expand-text">Expand all</span><span class="close-text" style="display: none;">Collapse all</span></a>
+                <a class="back-to-top d-block py-1" href="#">Back to top</a>
+                <a class="go-to-bottom d-block py-1" href="#">Go to bottom</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '#toc-content',
+            // Where to grab the headings to build the table of contents.
+            contentSelector: 'article',
+            // Which headings to grab inside of the contentSelector element.
+            headingSelector: 'h1, h2, h3',
+            // For headings inside relative or absolute positioned containers within content.
+            hasInnerContainers: true,
+        });
+    </script>
+
+
+    <script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        MathJax.Hub.Config({
+            tex2jax:{inlineMath:[['$', '$']]}
+        })
+    </script>
+
+    
+
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 text-center">
+                <ul class="list-inline">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright footer-author">
+                    &copy; 2021-2024 
+                    <a rel="external" class="copyright-link" href="" target="_blank">Utaha</a><br/>
+                    Powered by <a rel="external" class="copyright-link" href="https://hexo.io/" target="_blank">Hexo</a>  
+                    <span class="copyright-split">&nbsp;|&nbsp;&nbsp;</span>
+                    Theme <a rel="external" class="copyright-link" href="https://github.com/luswdev/hexo-theme-clean.git" target="_blank">Clean</a>
+                    
+                    
+                        <span id="busuanzi_container_site_uv">
+                            <span class="copyright-split">&nbsp;|&nbsp;</span>
+                            <i class="fas fa-user-friends"></i>&nbsp;&nbsp;<span id="busuanzi_value_site_uv"></span>&nbsp;
+                        </span>
+                    
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    <!-- jQuery -->
+<script src="//cdn.jsdelivr.net/npm/jquery@2.1.4/dist/jquery.min.js"></script>
+
+<!-- For drop down -->
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+<!-- Gallery -->
+<script src="//cdn.jsdelivr.net/npm/lightgallery@1.6.11/dist/js/lightgallery-all.min.js"></script>
+<!-- Busuanzi -->
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Search script -->
+
+<script src="/ctf-note/js/search.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        searchFunc( '/ctf-note/search.xml' , 'searchInput', 'searchResult');
+    });
+</script>
+
+
+
+<script src="/ctf-note/js/main.js"></script>
+
+
+
+    <!-- Search Modal -->
+    <!-- Modal -->
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content overflow-auto">
+            <div class="modal-header">
+                <input type="text" class="form-control" placeholder="Searching Keywords..." id="searchInput">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="searchResult">
+                    <div class="search-empty text-center text-muted p-5">
+                        <i class="far fa-meh"></i>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

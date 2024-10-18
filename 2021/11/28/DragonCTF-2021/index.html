@@ -211,34 +211,108 @@
 </span>  
                 
                 <h2 id="introduction">Introduction</h2>
-<p>Dragon CTF is a really high-weighted event (99.33). I created an account and planned to play solo for my ctftime rating, but then found out that Balsn is also playing, so I quickly switch to play with Balsn. There are 3 crypto challenges with decent difficulty gaps. The easiest one was quickly solved by my teammates and I didn't even have the chance to take a look, the other two are both CRC recursive challenge, with the hard one having bigger parameters. I solo solved the easier version, and with the same idea, sasdf was able to solve the harder version by optimizing my algorithm. Credit sasdf for the code and those optimization ideas, and tpobenvi for discussion.</p>
+<p>Dragon CTF is a really high-weighted event (99.33). I created an
+account and planned to play solo for my ctftime rating, but then found
+out that Balsn is also playing, so I quickly switch to play with Balsn.
+There are 3 crypto challenges with decent difficulty gaps. The easiest
+one was quickly solved by my teammates and I didn't even have the chance
+to take a look, the other two are both CRC recursive challenge, with the
+hard one having bigger parameters. I solo solved the easier version, and
+with the same idea, sasdf was able to solve the harder version by
+optimizing my algorithm. Credit sasdf for the code and those
+optimization ideas, and tpobenvi for discussion.</p>
 <p>In this writeup we go straight to the harder version.</p>
 <h2 id="crc-recursive-challenge">CRC recursive challenge</h2>
 <h3 id="challenge">Challenge</h3>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># crc64 for the easier version</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crc128</span>(<span class="params">buf, crc=<span class="number">0xffffffffffffffffffffffffffffffff</span></span>):</span></span><br><span class="line">    <span class="keyword">for</span> val <span class="keyword">in</span> buf:</span><br><span class="line">        crc ^= val &lt;&lt; <span class="number">120</span></span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">            crc &lt;&lt;= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> crc &amp; <span class="number">2</span>**<span class="number">128</span>:</span><br><span class="line">                crc ^= <span class="number">0x14caa61b0d7fe5fa54189d46709eaba2d</span></span><br><span class="line">    <span class="keyword">return</span> crc</span><br><span class="line"></span><br><span class="line">inp = <span class="built_in">input</span>().strip().encode()</span><br><span class="line">crc = crc128(inp)</span><br><span class="line"><span class="keyword">if</span> inp == <span class="string">f&#x27;My crc128 is 0x<span class="subst">&#123;crc:032x&#125;</span>! Cool, isn\&#x27;t it?&#x27;</span>.encode():</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;flag.txt&#x27;</span>, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="built_in">print</span>(f.read().strip())</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Nope!&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="solution">Solution</h3>
-<p>In the following writeup, the <span class="math inline">\(+\)</span> operation means xor 99% of the time.</p>
-<p>The first intuition is that the crc function is linear, so we might just need to solve some linear equations to find the correct crc string. Let's say the input crc is <span class="math inline">\(I = b_{127}b_{126}\cdots b_0\)</span> (every <span class="math inline">\(b_i\)</span> is a single bit), then crc128 can be written as</p>
-<p><span class="math display">\[\mathsf{CRC128}(I) = \bigoplus_{i} b_iu_i \oplus C\]</span></p>
-<p>for some fixed 128-bit <span class="math inline">\(u_i\)</span> and <span class="math inline">\(C\)</span>. so we only have to solve something like</p>
-<p><span class="math display">\[\bigoplus_{i} b_iu_i \oplus C = \bigoplus_{i} b_i 2^i\]</span></p>
-<p>which is a typical linear basis problem with size 128 and can be solved using Guassian elimination.</p>
-<p>However, the problem is that 'a' does not mean '9' + 1 in terms of the ascii value, so the linearity of <span class="math inline">\(\mathsf{CRC128}(I)\)</span> breaks. A quick fix is to bruteforce <span class="math inline">\(2^{32}\)</span> possibilities to determine if a character is an alphabet or number, and solve the linear equation, but as I finished implementing and ran the attack, this happened:</p>
+<p>In the following writeup, the <span class="math inline">\(+\)</span>
+operation means xor 99% of the time.</p>
+<p>The first intuition is that the crc function is linear, so we might
+just need to solve some linear equations to find the correct crc string.
+Let's say the input crc is <span class="math inline">\(I =
+b_{127}b_{126}\cdots b_0\)</span> (every <span
+class="math inline">\(b_i\)</span> is a single bit), then crc128 can be
+written as</p>
+<p><span class="math display">\[\mathsf{CRC128}(I) = \bigoplus_{i}
+b_iu_i \oplus C\]</span></p>
+<p>for some fixed 128-bit <span class="math inline">\(u_i\)</span> and
+<span class="math inline">\(C\)</span>. so we only have to solve
+something like</p>
+<p><span class="math display">\[\bigoplus_{i} b_iu_i \oplus C =
+\bigoplus_{i} b_i 2^i\]</span></p>
+<p>which is a typical linear basis problem with size 128 and can be
+solved using Guassian elimination.</p>
+<p>However, the problem is that 'a' does not mean '9' + 1 in terms of
+the ascii value, so the linearity of <span
+class="math inline">\(\mathsf{CRC128}(I)\)</span> breaks. A quick fix is
+to bruteforce <span class="math inline">\(2^{32}\)</span> possibilities
+to determine if a character is an alphabet or number, and solve the
+linear equation, but as I finished implementing and ran the attack, this
+happened:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Eaiser version</span></span><br><span class="line">inp = <span class="string">b&quot;My crc64 is 0x89de213b8291e0dc! Cool, isn&#x27;t it?&quot;</span></span><br><span class="line">crc64(inp) = <span class="string">&#x27;89dc213b8291c0da&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>A few characters are off! Why? After a long debug, I found out the heartbreaking fact: <code>ord('a') = 97</code> and <code>int('a', 16) = 10</code>, which means that they are not "aligned".</p>
-<p>Let's first look at why the digits work perfectly. We know that crc128 is linear to every bit of the input, so if the input is a single character <span class="math inline">\(c = b_7b_6\cdots b_0\)</span>, then</p>
-<p><span class="math display">\[\mathsf{CRC128}(c) = \bigoplus_i b_iu_i \oplus C\]</span></p>
-<p>And when we parse the character <span class="math inline">\(c\)</span> as integer's hex representation, we have</p>
-<p><span class="math display">\[\mathsf{toInt}(c) = c - 48 = c \oplus 48 = \bigoplus_i b_i2^i \oplus 48\]</span></p>
-<p>for every digit <span class="math inline">\(c\)</span>. Everything is linear, perfect! However, in the case of the alphabets,</p>
+<p>A few characters are off! Why? After a long debug, I found out the
+heartbreaking fact: <code>ord('a') = 97</code> and
+<code>int('a', 16) = 10</code>, which means that they are not
+"aligned".</p>
+<p>Let's first look at why the digits work perfectly. We know that
+crc128 is linear to every bit of the input, so if the input is a single
+character <span class="math inline">\(c = b_7b_6\cdots b_0\)</span>,
+then</p>
+<p><span class="math display">\[\mathsf{CRC128}(c) = \bigoplus_i b_iu_i
+\oplus C\]</span></p>
+<p>And when we parse the character <span
+class="math inline">\(c\)</span> as integer's hex representation, we
+have</p>
+<p><span class="math display">\[\mathsf{toInt}(c) = c - 48 = c \oplus 48
+= \bigoplus_i b_i2^i \oplus 48\]</span></p>
+<p>for every digit <span class="math inline">\(c\)</span>. Everything is
+linear, perfect! However, in the case of the alphabets,</p>
 <p><span class="math display">\[\mathsf{toInt}(c) = c - 87\]</span></p>
-<p>and we are doomed. There's no way to written it as a beautiful linear combination of <span class="math inline">\(b_i\)</span>s (with xor operation). The fact that <span class="math inline">\(48\)</span> is a multiple of 16 while <span class="math inline">\(87\)</span> is not changes everything, unless...</p>
-<p>Let's first go back to the crc128, it operates on a finite field of size <span class="math inline">\(2^{128}\)</span>, and by the way it is calculated, we can conclude that</p>
-<p><span class="math display">\[u_3 = xu_2 = x^2 u_1 = x^3 u_0\]</span></p>
-<p>where <span class="math inline">\(x\)</span> is the variable for the finite field. For example, if we change a single byte of the string from '0' (48) to '1' (49), and the crc128 value differs (xor) by some <span class="math inline">\(A\)</span>, then if we change it from '0' (48) to '2' (50), the xor value differs by <span class="math inline">\(Ax\)</span>, which the "multiplying by x" is calculated in this way:</p>
+<p>and we are doomed. There's no way to written it as a beautiful linear
+combination of <span class="math inline">\(b_i\)</span>s (with xor
+operation). The fact that <span class="math inline">\(48\)</span> is a
+multiple of 16 while <span class="math inline">\(87\)</span> is not
+changes everything, unless...</p>
+<p>Let's first go back to the crc128, it operates on a finite field of
+size <span class="math inline">\(2^{128}\)</span>, and by the way it is
+calculated, we can conclude that</p>
+<p><span class="math display">\[u_3 = xu_2 = x^2 u_1 = x^3
+u_0\]</span></p>
+<p>where <span class="math inline">\(x\)</span> is the variable for the
+finite field. For example, if we change a single byte of the string from
+'0' (48) to '1' (49), and the crc128 value differs (xor) by some <span
+class="math inline">\(A\)</span>, then if we change it from '0' (48) to
+'2' (50), the xor value differs by <span
+class="math inline">\(Ax\)</span>, which the "multiplying by x" is
+calculated in this way:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multByX</span>(<span class="params">num</span>):</span></span><br><span class="line">    num &lt;&lt;= <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> N == <span class="number">16</span>:</span><br><span class="line">        <span class="keyword">if</span> num &amp; (<span class="number">1</span> &lt;&lt; <span class="number">64</span>):</span><br><span class="line">            num ^= <span class="number">0x1ad93d23594c935a9</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> num &amp; (<span class="number">1</span> &lt;&lt; <span class="number">128</span>):</span><br><span class="line">            num ^= <span class="number">0x14caa61b0d7fe5fa54189d46709eaba2d</span></span><br><span class="line">    <span class="keyword">return</span> num</span><br></pre></td></tr></table></figure>
-<p>At the same time, changing a single byte from '0' to '1' also change its hex value by some power of 256 (depends on the character's index), let this value be <span class="math inline">\(B\)</span>. Similarly, replacing the byte from '0' to '2' changes the hex value by <span class="math inline">\(2B = Bx\)</span> as <span class="math inline">\(B &lt; 2^{127}\)</span>. The linearity we talked about is that replacing a '0' to a digit <span class="math inline">\(b_3b_2b_1b_0\)</span> makes a crc128 difference of <span class="math inline">\((b_3x^3 + b_2x^2 + b_1x + b_0)A\)</span> and a hex value difference of <span class="math inline">\((b_3x^3 + b_2x^2 + b_1x + b_0)B\)</span>. So if we have the freedom to change '0' to any other digit, we can describe the difference of the value <span class="math inline">\(\mathsf{CRC128}(I) \oplus \mathsf{toInt}(I)\)</span> as "choose some values from <span class="math inline">\([A + B, (A + B)x, (A + B)x^2, (A + B)x^3]\)</span> and xor them together". So if we hope <span class="math inline">\(\mathsf{CRC128}(I) \oplus \mathsf{toInt}(I)\)</span> to change by a fixed amount, we can check if the 4 numbers above span that amount. (10 to 15 is invalid but we ignore this fact for now)</p>
-<p>For alphabets, the linearity is not so obvious, if we replace an 'a' to 'b', the crc value (which depends on the ascii value) changes by <span class="math inline">\(A(x + 1)\)</span> (<code>ord('a') ^ ord('b') = 3</code>), while the hex value changes by <span class="math inline">\(B\)</span> (<code>int('a', 16) ^ int('b', 16) = 1</code>). We can make a table for this</p>
+<p>At the same time, changing a single byte from '0' to '1' also change
+its hex value by some power of 256 (depends on the character's index),
+let this value be <span class="math inline">\(B\)</span>. Similarly,
+replacing the byte from '0' to '2' changes the hex value by <span
+class="math inline">\(2B = Bx\)</span> as <span class="math inline">\(B
+&lt; 2^{127}\)</span>. The linearity we talked about is that replacing a
+'0' to a digit <span class="math inline">\(b_3b_2b_1b_0\)</span> makes a
+crc128 difference of <span class="math inline">\((b_3x^3 + b_2x^2 + b_1x
++ b_0)A\)</span> and a hex value difference of <span
+class="math inline">\((b_3x^3 + b_2x^2 + b_1x + b_0)B\)</span>. So if we
+have the freedom to change '0' to any other digit, we can describe the
+difference of the value <span class="math inline">\(\mathsf{CRC128}(I)
+\oplus \mathsf{toInt}(I)\)</span> as "choose some values from <span
+class="math inline">\([A + B, (A + B)x, (A + B)x^2, (A + B)x^3]\)</span>
+and xor them together". So if we hope <span
+class="math inline">\(\mathsf{CRC128}(I) \oplus
+\mathsf{toInt}(I)\)</span> to change by a fixed amount, we can check if
+the 4 numbers above span that amount. (10 to 15 is invalid but we ignore
+this fact for now)</p>
+<p>For alphabets, the linearity is not so obvious, if we replace an 'a'
+to 'b', the crc value (which depends on the ascii value) changes by
+<span class="math inline">\(A(x + 1)\)</span>
+(<code>ord('a') ^ ord('b') = 3</code>), while the hex value changes by
+<span class="math inline">\(B\)</span>
+(<code>int('a', 16) ^ int('b', 16) = 1</code>). We can make a table for
+this</p>
 <div class="table-responsive">
 <table class="table table-bordered table-striped">
 <thead>
@@ -270,32 +344,67 @@
 </tr>
 <tr class="even">
 <td>'f'</td>
-<td><span class="math inline">\(A(x^2 + x + 1) + B(x^2 + 1)\)</span></td>
+<td><span class="math inline">\(A(x^2 + x + 1) + B(x^2 +
+1)\)</span></td>
 </tr>
 </tbody>
 </table></div>
-<p>it turned out that we can also use 4 numbers to span these values: <span class="math inline">\([Ax^2 + Bx^2, A(x + 1) + B, Ax + Bx, Bx^2]\)</span>.</p>
-<p>The reason why we want to use 4 numbers to cover the difference is that we can control 32 bytes of the string, so the difference we can make is spanned by 128 numbers. As we are operated on a finite field of size <span class="math inline">\(2^{128}\)</span>, the solution is unique (or does not exist), and we can check if it is valid after finding this unique solution. (while if we use 5 numbers to cover the possible differences, we have 160 128-bit numbers, and there are like <span class="math inline">\(2^{32}\)</span> ways to generate a fixed value).</p>
-<p>As alphabet is actually (in some sense) linear, we have the following attack:</p>
+<p>it turned out that we can also use 4 numbers to span these values:
+<span class="math inline">\([Ax^2 + Bx^2, A(x + 1) + B, Ax + Bx,
+Bx^2]\)</span>.</p>
+<p>The reason why we want to use 4 numbers to cover the difference is
+that we can control 32 bytes of the string, so the difference we can
+make is spanned by 128 numbers. As we are operated on a finite field of
+size <span class="math inline">\(2^{128}\)</span>, the solution is
+unique (or does not exist), and we can check if it is valid after
+finding this unique solution. (while if we use 5 numbers to cover the
+possible differences, we have 160 128-bit numbers, and there are like
+<span class="math inline">\(2^{32}\)</span> ways to generate a fixed
+value).</p>
+<p>As alphabet is actually (in some sense) linear, we have the following
+attack:</p>
 <ul>
-<li>enumerate <span class="math inline">\(2^{32}\)</span> possibilities of digit/alphabet combination</li>
-<li>for each possibilty, make the base-case string <span class="math inline">\(s\)</span>: a string that has only '0' and 'a'.</li>
-<li>calculate the base-case difference <span class="math inline">\(\mathsf{CRC128}(s) \oplus \mathsf{toInt}(s)\)</span></li>
-<li>construct the 128 values that describe the possible differences of the value <span class="math inline">\(\mathsf{CRC128}(I) \oplus \mathsf{toInt}(I)\)</span></li>
-<li>solve the linear basis problem to see if/how we can make the value <span class="math inline">\(\mathsf{CRC128}(I) \oplus \mathsf{toInt}(I)\)</span> zero.</li>
-<li>check if that's a valid solution (for example, 10 ~ 16 for digits)</li>
+<li>enumerate <span class="math inline">\(2^{32}\)</span> possibilities
+of digit/alphabet combination</li>
+<li>for each possibilty, make the base-case string <span
+class="math inline">\(s\)</span>: a string that has only '0' and
+'a'.</li>
+<li>calculate the base-case difference <span
+class="math inline">\(\mathsf{CRC128}(s) \oplus
+\mathsf{toInt}(s)\)</span></li>
+<li>construct the 128 values that describe the possible differences of
+the value <span class="math inline">\(\mathsf{CRC128}(I) \oplus
+\mathsf{toInt}(I)\)</span></li>
+<li>solve the linear basis problem to see if/how we can make the value
+<span class="math inline">\(\mathsf{CRC128}(I) \oplus
+\mathsf{toInt}(I)\)</span> zero.</li>
+<li>check if that's a valid solution (for example, 10 ~ 16 for
+digits)</li>
 </ul>
-<p>The time complexity is <span class="math inline">\(O(2^{N} \cdot \frac{(4N)^3}{64}) = O(2^N N^3)\)</span> because the linear basis requires a cubic-time guassian elimination, and all the operations are bitwise xor, hence the factor 64.</p>
-<p>I implemented this using python, and it takes 11 mins to run the easier version, and like 100 days for the harder version, so I pretty much gave up here until sasdf suggested using C language. However, it was my sleeping time, so sasdf did all the remaining optimizing work:</p>
+<p>The time complexity is <span class="math inline">\(O(2^{N} \cdot
+\frac{(4N)^3}{64}) = O(2^N N^3)\)</span> because the linear basis
+requires a cubic-time guassian elimination, and all the operations are
+bitwise xor, hence the factor 64.</p>
+<p>I implemented this using python, and it takes 11 mins to run the
+easier version, and like 100 days for the harder version, so I pretty
+much gave up here until sasdf suggested using C language. However, it
+was my sleeping time, so sasdf did all the remaining optimizing
+work:</p>
 <ul>
 <li>switch from Python to C</li>
-<li>while bruteforcing the <span class="math inline">\(2^{32}\)</span> possibilities, the adjacent iterations have similar linear basis, so store the prefix linear basis and be lazy calculating the linear basis. This reduces a 128 in terms of the time complexity.</li>
+<li>while bruteforcing the <span class="math inline">\(2^{32}\)</span>
+possibilities, the adjacent iterations have similar linear basis, so
+store the prefix linear basis and be lazy calculating the linear basis.
+This reduces a 128 in terms of the time complexity.</li>
 <li>parallelize</li>
 <li>burn GPU</li>
 </ul>
-<p>The second idea is quite simple that I feel bad didn't come up with it as an competitive programmer. Anyway, the script by sasdf is <a target="_blank" rel="noopener" href="https://gist.github.com/sasdf/78fa4f4c9dc9db93534e4742b1de92e1">here</a>.</p>
+<p>The second idea is quite simple that I feel bad didn't come up with
+it as an competitive programmer. Anyway, the script by sasdf is <a
+target="_blank" rel="noopener" href="https://gist.github.com/sasdf/78fa4f4c9dc9db93534e4742b1de92e1">here</a>.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>Congrats Balsn for getting the first big-event champion this year!</p>
+<p>Congrats Balsn for getting the first big-event champion this
+year!</p>
 
             </div>
 
@@ -412,7 +521,7 @@
                     
                 </ul>
                 <p class="copyright footer-author">
-                    &copy; 2021-2023 
+                    &copy; 2021-2024 
                     <a rel="external" class="copyright-link" href="" target="_blank">Utaha</a><br/>
                     Powered by <a rel="external" class="copyright-link" href="https://hexo.io/" target="_blank">Hexo</a>  
                     <span class="copyright-split">&nbsp;|&nbsp;&nbsp;</span>
